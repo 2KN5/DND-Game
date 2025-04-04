@@ -7,6 +7,8 @@
 struct Hero {
     char class;
     int numberOfMoves;
+    int damage;
+    int shields;
     int health;
     int x, y;
 };

@@ -13,17 +13,17 @@ void stats(struct Hero h[], int count)
         }
         if(h[i].class == 'W')
         {
-            h[i].health= 10;
+            h[i].health = 4;
             h[i].numberOfMoves = 10;
         }
         if(h[i].class == 'E')
         {
-            h[i].health = 12;
+            h[i].health = 6;
             h[i].numberOfMoves = 12;
         }
         if(h[i].class == 'D')
         {
-            h[i].health = 6;
+            h[i].health = 7;
             h[i].numberOfMoves = 6;
         }
     }

@@ -24,6 +24,14 @@ int numberOfDig(int x){
     return c;
 }
 
+void returnColChar(int x, int width){
+    if(x < 26){
+        printf("%*c ", width, 'A' + x);
+    } else if(x <= 100){
+        printf("%*c%c", width, 'A' + x / 26 - 1, 'A' + x % 26);
+    } 
+}
+
 void printGrid(char ***grid, int rows, int col, struct Hero hero[], int partySize, char *dif){
 
     printf("Creating map...\n");
@@ -33,18 +41,20 @@ void printGrid(char ***grid, int rows, int col, struct Hero hero[], int partySiz
     //Printing the grid.
     system("cls");
 
-    printf(" %*c", width, ' ');
+    printf("-DIFFICULTY: %s\n\n", dif);
+    printf("%*c", width + 1, ' ');
     for(int i = 0; i < col; ++i){
-        printf("%c ", 'A' + i);
+        returnColChar(i, 2);
     }
     printf("\n");
     for(int i = 0; i < rows; ++i){
         printf("%*d ", width, i + 1);
         for(int j = 0; j < col; ++j){
-            printf("%c ", (*grid)[i][j]);
+            printf("%2c ", (*grid)[i][j]);
         }
         printf("\n");
     }
+    printf("\n");
     for(int i = 0; i < partySize; ++i){
         printf("%c: %d ", hero[i].class, hero[i].health);
     }

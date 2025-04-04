@@ -6,6 +6,8 @@
 
 struct Enemy {
     int numberOfMoves;
+    int damage;
+    int shields;
     int health;
     int x, y;
 };

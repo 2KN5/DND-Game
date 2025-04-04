@@ -9,7 +9,8 @@
 
 void clearBuffer();
 void upperString(char *str);
-void printChoices(char *str, struct Hero h[], int noh);
+int check(char *choice);
+void printChoices(char *str, struct Hero h[], int noh, char *choice);
 void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]);
 
 #endif

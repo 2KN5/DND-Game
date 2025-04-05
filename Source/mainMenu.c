@@ -63,7 +63,7 @@ void printChoices(char *str, struct Hero h[], int noh, char *first){
             clearHero(h);
             return;
         } 
-    }sdfsfd
+    }
 }
 
 void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){

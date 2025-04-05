@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-static inline int clearScreen(){
+static inline void clearScreen(){
     #ifdef _WIN32
         system("cls");
     #else

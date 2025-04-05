@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_PARTY_SIZE 4
+
 struct Hero {
     char class;
     int numberOfMoves;

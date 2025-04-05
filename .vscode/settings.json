@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "clearscreen.h": "c"
+        "clearscreen.h": "c",
+        "herostats.h": "c",
+        "roll.h": "c"
     }
 }

@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <mainMenu.h>
-#include "heroStats.h"
+#include "mainMenu.h"
 
 void clearBuffer(){
     int c, i = 0;

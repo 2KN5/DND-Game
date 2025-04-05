@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_MONSTER_COUNT 6
+
 struct Enemy {
     int numberOfMoves;
     int damage;
@@ -12,6 +14,6 @@ struct Enemy {
     int x, y;
 };
 
-void enemyStats(struct Enemy e[], char *dif);
+void enemyStats(struct Enemy e[], char *dif, int *monsterCount);
 
 #endif

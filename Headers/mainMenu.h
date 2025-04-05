@@ -4,9 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "heroStats.h"
+#include "enemyStats.h"
 #include "clearScreen.h"
-
-#define MAX_PARTY_SIZE 4
 
 void clearBuffer();
 void upperString(char *str);

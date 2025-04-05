@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "grid.h"
-#include "mainMenu.h"
+#include "clearScreen.h"
+#include "enemyDamage.h"
+#include "enemyStats.h"
+#include "heroDamage.h"
 #include "heroStats.h"
 #include "mainMenu.h"
-#include "enemyDamage.h"
-#include "heroDamage.h"
-#include "clearScreen.h"
+#include "grid.h"
+#include "roll.h"
 
 void readMS(int *rows, int *col){
     char buffer[100] = {' '};
@@ -29,18 +30,19 @@ int main(void){
 
     srand(time(NULL));
 
-    int pSize, rows, col;
+    int pSize, rows, col, mCount;
     char **grid, dif[10];
     struct Hero hero[MAX_PARTY_SIZE];
+    struct Enemy enemy[MAX_MONSTER_COUNT];
     menu(hero, &pSize, dif);
     
     //Initialize hero stats.
     stats(hero, pSize);
-    
+    enemyStats(enemy, dif, &mCount);
     //Generate the map
     readMS(&rows, &col);
     createGrid(&grid, rows, col);
-    printGrid(&grid, rows, col, hero, pSize, dif);
+    printGrid(&grid, rows, col, hero, enemy, pSize, mCount, dif);
     freeGrid(&grid, rows);
     return 0;
 }

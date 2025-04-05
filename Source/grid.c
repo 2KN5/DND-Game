@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "grid.h"
-#include "mainMenu.h"
 
 void createGrid(char ***grid, int rows, int col){
     printf("Generating map...\n");
@@ -32,7 +31,7 @@ void returnColChar(int x, int width){
     } 
 }
 
-void printGrid(char ***grid, int rows, int col, struct Hero hero[], int partySize, char *dif){
+void printGrid(char ***grid, int rows, int col, struct Hero hero[], struct Enemy enemy[], int partySize, int enemyCount, char *dif){
 
     printf("Creating map...\n");
     //Using the largest number as the width specifier.
@@ -56,6 +55,10 @@ void printGrid(char ***grid, int rows, int col, struct Hero hero[], int partySiz
     printf("\n");
     for(int i = 0; i < partySize; ++i){
         printf("%c: %d ", hero[i].class, hero[i].health);
+    }
+    printf("\n");
+    for(int i = 0; i < enemyCount; ++i){
+        printf("%d ", enemy[i].health);
     }
 }
 

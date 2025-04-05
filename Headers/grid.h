@@ -7,6 +7,7 @@
 
 void createGrid(char ***grid, int rows, int col);
 int numberOfDig(int x);
+void returnColChar(int x, int width);
 void printGrid(char ***grid, int rows, int col, struct Hero hero[], int partySize, char *dif);
 void freeGrid(char ***grid, int rows);
 

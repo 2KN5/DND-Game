@@ -29,7 +29,7 @@ int main(void){
     srand(time(NULL));
 
     int pSize, rows, col;
-    char **grid, dif[8];
+    char **grid, dif[10];
     struct Hero hero[MAX_PARTY_SIZE];
     menu(hero, &pSize, dif);
     

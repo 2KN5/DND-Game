@@ -9,7 +9,7 @@
 #include "heroDamage.h"
 
 void readMS(int *rows, int *col){
-    char buffer[100] = {};
+    char buffer[100] = {' '};
     while(buffer[0] != '\n'){
         system("cls");
         printf("MAP RESTRICTIONS -> Has to be at least 5x5, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");

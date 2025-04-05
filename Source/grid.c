@@ -39,7 +39,7 @@ void printGrid(char ***grid, int rows, int col, struct Hero hero[], int partySiz
     int width = numberOfDig(rows);
 
     //Printing the grid.
-    system("cls");
+    clearScreen();
     printf("-DIFFICULTY: %s\n\n", dif);
     printf("%*c", width + 1, ' ');
     for(int i = 0; i < col; ++i){

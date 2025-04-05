@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "heroStats.h"
+#include "clearScreen.h"
 
 #define MAX_PARTY_SIZE 4
 

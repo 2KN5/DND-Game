@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "heroStats.h"
+#include "clearScreen.h"
 
 void createGrid(char ***grid, int rows, int col);
 int numberOfDig(int x);

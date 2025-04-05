@@ -7,15 +7,16 @@
 #include "mainMenu.h"
 #include "enemyDamage.h"
 #include "heroDamage.h"
+#include "clearScreen.h"
 
 void readMS(int *rows, int *col){
     char buffer[100] = {' '};
     while(buffer[0] != '\n'){
-        system("cls");
+        clearScreen();
         printf("MAP RESTRICTIONS -> Has to be at least 5x5, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");
         printf("Enter map size(N x M): ");
         while(scanf("%d%d", rows, col) != 2 || *rows < 5 || *col < 5 || *col > 92){
-            system("cls");
+            clearScreen();
             printf("MAP RESTRICTIONS -> Has to be at least 5x5, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");
             printf("Enter map size(N x M): ");
             clearBuffer();

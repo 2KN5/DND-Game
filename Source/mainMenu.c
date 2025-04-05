@@ -35,7 +35,7 @@ void printChoices(char *str, struct Hero h[], int noh, char *first){
     while(1){
 
         //Always re-display settings.
-        system("cls");
+        clearScreen();
         printf("GAME SETTINGS\n\n");
         printf("DIFFICULTY: %s\nYOUR PARTY INVOLVES: ", str);
         for(int i = 0; i < noh; ++i){
@@ -45,7 +45,7 @@ void printChoices(char *str, struct Hero h[], int noh, char *first){
         //First question: ...
         printf("\n\nAre you ready to begin? (Y/N): ");
         if(!check(first)) continue;
-        system("cls");
+        clearScreen();
         if(*first == 'Y'){
             return; // Exit to starting menu.
         }
@@ -53,7 +53,7 @@ void printChoices(char *str, struct Hero h[], int noh, char *first){
         while(1){
             printf("Would you like to change your choices? (Y/N): ");
             if(!check(&second)){
-                system("cls");
+                clearScreen();
                 printf("Invalid Statement!\n\n", second);
                 continue;
             }
@@ -70,7 +70,7 @@ void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
 
     int n;
     char choice;
-    system("cls");
+    clearScreen();
     printf("Welcome to the game!\n\n");
 
     //Keep asking the user, until they decide on their choices.
@@ -82,7 +82,7 @@ void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
             printf(msg, MAX_PARTY_SIZE);
             printf("Enter number of heroes (0-%d): ", MAX_PARTY_SIZE);
             while(scanf("%d", &n) != 1 || n < 0 || n > MAX_PARTY_SIZE){
-                system("cls");
+                clearScreen();
                 printf("Wrong input! You may assemble a party of up to %d unique heroes.\n\n", MAX_PARTY_SIZE);
                 printf("Enter number of heroes (0-%d): ", MAX_PARTY_SIZE);
                 clearBuffer();
@@ -91,7 +91,7 @@ void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
 
             //Change the message after entering the first invalid value.
             if(buffer[0] != '\n') strcpy(msg, "Wrong input! You may assemble a party of up to %d unique heroes.\n\n");
-            system("cls");
+            clearScreen();
         }
 
         printf("Perfect! You chose %d heroes!\n\n", n);
@@ -107,7 +107,7 @@ void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
                 printf("(B) Barbarian, (D) Dwarf, (E) Elf, (W) Wizard.\n");
                 printf("Select a hero type -> ( B / D / E / W): ");
                 fgets(chooseClass, sizeof(chooseClass), stdin);
-                system("cls");
+                clearScreen();
 
                 //Checking if user entered > 1 characters.
                 if(chooseClass[strlen(chooseClass) - 1] != '\n'){
@@ -151,7 +151,7 @@ void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
         printf("Choose the difficulty -> (Easy, Medium, Hard): ");
         while(1){
             fgets(dif, 10, stdin);
-            system("cls");
+            clearScreen();
 
             //Check if value entered has a valid length.
             if(dif[strlen(dif) - 1] != '\n'){
@@ -170,7 +170,7 @@ void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
             break;
         }
         printChoices(dif, hero, n, &choice);
-        system("cls");
+        clearScreen();
         if(choice == 'Y') return;
     }
 }

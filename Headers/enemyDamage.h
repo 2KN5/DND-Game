@@ -6,7 +6,7 @@
 #include "enemyStats.h"
 #include "roll.h"
 
-void enemyDamage(struct Enemy *enemy);
-void enemyDefence(struct Enemy *enemy);
+void enemyDamage(Enemy *enemy);
+void enemyDefence(Enemy *enemy);
 
 #endif

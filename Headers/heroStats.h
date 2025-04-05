@@ -6,15 +6,15 @@
 
 #define MAX_PARTY_SIZE 4
 
-struct Hero {
+typedef struct Hero {
     char class;
     int numberOfMoves;
     int damage;
     int shields;
     int health;
     int x, y;
-};
+} Hero;
 
-void stats(struct Hero h[], int count);
+void stats(Hero h[], int count);
 
 #endif

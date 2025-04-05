@@ -3,7 +3,7 @@
 #include <time.h>
 #include "heroDamage.h"
 
-void heroDamage(struct Hero *hero){
+void heroDamage(Hero *hero){
     int side, dmg = 0;
     for(int i = 0; i < 3; ++i){
         side = roll();
@@ -12,7 +12,7 @@ void heroDamage(struct Hero *hero){
     hero->damage = dmg;
 }
 
-void heroDefence(struct Hero *hero){
+void heroDefence(Hero *hero){
     int side, def = 0;
     for(int i = 0; i < 2; ++i){
         side = roll();

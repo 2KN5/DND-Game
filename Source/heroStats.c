@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "heroStats.h"
 
-void stats(struct Hero h[], int count)
+void stats(Hero h[], int count)
 {
     for(int i = 0; i < count; i++)
     {

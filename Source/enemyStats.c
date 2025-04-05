@@ -4,7 +4,7 @@
 #include <string.h>
 #include "enemyStats.h"
 
-void enemyStats(struct Enemy e[], char *dif, int *monsterCount){
+void enemyStats(Enemy e[], char *dif, int *monsterCount){
 
     int lowerBound, upperBound;
     if(strcmp(dif, "EASY") == 0){

@@ -23,13 +23,13 @@ int check(char *choice){
     return (*choice == 'N' || *choice == 'Y' ? 1 : 0);
 }
 
-void clearHero(struct Hero h[MAX_PARTY_SIZE]){
+void clearHero(Hero h[MAX_PARTY_SIZE]){
     for(int i = 0; i < MAX_PARTY_SIZE; ++i){
         h[i].class = ' ';
     }
 }
 
-void printChoices(char *str, struct Hero h[], int noh, char *first){
+void printChoices(char *str, Hero h[], int noh, char *first){
     char second;
     while(1){
 
@@ -65,7 +65,7 @@ void printChoices(char *str, struct Hero h[], int noh, char *first){
     }
 }
 
-void menu(struct Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
+void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
 
     int n;
     char choice;

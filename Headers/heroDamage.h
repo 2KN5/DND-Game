@@ -6,7 +6,7 @@
 #include "heroStats.h"
 #include "roll.h"
 
-void heroDamage(struct Hero *hero);
-void heroDefence(struct Hero *hero);
+void heroDamage(Hero *hero);
+void heroDefence(Hero *hero);
 
 #endif

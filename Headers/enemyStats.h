@@ -6,14 +6,14 @@
 
 #define MAX_MONSTER_COUNT 6
 
-struct Enemy {
+typedef struct Enemy {
     int numberOfMoves;
     int damage;
     int shields;
     int health;
     int x, y;
-};
+} Enemy;
 
-void enemyStats(struct Enemy e[], char *dif, int *monsterCount);
+void enemyStats(Enemy e[], char *dif, int *monsterCount);
 
 #endif

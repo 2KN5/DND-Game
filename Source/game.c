@@ -32,13 +32,13 @@ int main(void){
 
     int pSize, rows, col, mCount;
     char **grid, dif[10];
-    struct Hero hero[MAX_PARTY_SIZE];
-    struct Enemy enemy[MAX_MONSTER_COUNT];
-    menu(hero, &pSize, dif);
+    Hero hero[MAX_PARTY_SIZE];
+    Enemy enemy[MAX_MONSTER_COUNT];
+    //menu(hero, &pSize, dif);
     
     //Initialize hero stats.
-    stats(hero, pSize);
-    enemyStats(enemy, dif, &mCount);
+    //stats(hero, pSize);
+    //enemyStats(enemy, dif, &mCount);
     //Generate the map
     readMS(&rows, &col);
     createGrid(&grid, rows, col);

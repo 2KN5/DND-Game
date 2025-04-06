@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "clearScreen.h"
 #include "enemyDamage.h"
 #include "enemyStats.h"
@@ -34,15 +35,28 @@ int main(void){
     char **grid, dif[10];
     Hero hero[MAX_PARTY_SIZE];
     Enemy enemy[MAX_MONSTER_COUNT];
-    //menu(hero, &pSize, dif);
+    menu(hero, &pSize, dif);
     
     //Initialize hero stats.
-    //stats(hero, pSize);
-    //enemyStats(enemy, dif, &mCount);
+    stats(hero, pSize);
+    enemyStats(enemy, dif, &mCount);
+
     //Generate the map
     readMS(&rows, &col);
-    createGrid(&grid, rows, col);
+    createGrid(&grid, hero, pSize, enemy, mCount, rows, col);
     printGrid(&grid, rows, col, hero, enemy, pSize, mCount, dif);
+    printf("\n\nWelcome to the dungeon Player!\nTime to begin.\nMake your move: ");
+    char move[28];
+    while(1){
+        fgets(move, sizeof(move), stdin);
+        if(validString(move)){
+            printGrid(&grid, rows, col, hero, enemy, pSize, mCount, dif);
+            printf("\n\nInvalid Move!\nMake your move: ");
+            continue;
+        }
+        break;
+    }
+    printf("%s\n", move);
     freeGrid(&grid, rows);
     return 0;
 }

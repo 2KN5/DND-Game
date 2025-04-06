@@ -9,6 +9,18 @@ void clearBuffer(){
     while((c = getchar()) != '\n' && c != EOF);
 }
 
+int validString(char c[]){
+    if(c[strlen(c) - 1] != '\n'){
+        clearBuffer();
+        return 1;
+    } else if(strlen(c) - 1 <= 4){
+        return 1;
+    } else {
+        c[strlen(c) - 1] = '\0';
+        return 0;
+    }
+}
+
 void upperString(char *str){
     for(int i = 0; str[i] != '\0'; ++i){
         str[i] = toupper(str[i]);
@@ -23,7 +35,7 @@ int check(char *choice){
     return (*choice == 'N' || *choice == 'Y' ? 1 : 0);
 }
 
-void clearHero(Hero h[MAX_PARTY_SIZE]){
+void clearHero(Hero h[]){
     for(int i = 0; i < MAX_PARTY_SIZE; ++i){
         h[i].class = ' ';
     }
@@ -79,11 +91,11 @@ void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
         char buffer[100] = {' '}, msg[100] = {"You may assemble a party of up to %d unique heroes.\n\n"};
         while(buffer[0] != '\n'){
             printf(msg, MAX_PARTY_SIZE);
-            printf("Enter number of heroes (0-%d): ", MAX_PARTY_SIZE);
-            while(scanf("%d", &n) != 1 || n < 0 || n > MAX_PARTY_SIZE){
+            printf("Enter number of heroes (1-%d): ", MAX_PARTY_SIZE);
+            while(scanf("%d", &n) != 1 || n <= 0 || n > MAX_PARTY_SIZE){
                 clearScreen();
                 printf("Wrong input! You may assemble a party of up to %d unique heroes.\n\n", MAX_PARTY_SIZE);
-                printf("Enter number of heroes (0-%d): ", MAX_PARTY_SIZE);
+                printf("Enter number of heroes (1-%d): ", MAX_PARTY_SIZE);
                 clearBuffer();
             }
             fgets(buffer, sizeof(buffer), stdin);
@@ -155,7 +167,6 @@ void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
             //Check if value entered has a valid length.
             if(dif[strlen(dif) - 1] != '\n'){
                 clearBuffer();
-                continue;
             } else {
                 dif[strlen(dif) - 1] = '\0';
             }

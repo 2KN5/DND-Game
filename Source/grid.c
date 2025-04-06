@@ -48,7 +48,7 @@ void createDoor(char ***grid, int currentRow, int upper, int lower){
     (*grid)[currentRow - 1][door] = c;
 }
 
-void clearEntr(char ***grid, int rows, int col){
+void clearHall(char ***grid, int rows, int col){
     for(int i = 0; i < rows; ++i){
         for(int j = 0; j < col; ++j){
             if((*grid)[i][j] == '&') (*grid)[i][j] = '.';
@@ -56,12 +56,25 @@ void clearEntr(char ***grid, int rows, int col){
     }
 }
 
-void spawnHeroes(){
-
-}
-
-void spawnEnemies(){
-
+void spawnEntities(char ***grid, Hero hero[], int numberOfHeroes, Enemy enemy[], int numberOfEnemies, int rows, int col){
+    int i = 0;
+    while(i < numberOfHeroes){
+        int x = rand() % (rows - 2) + 1;
+        int y = rand() % (col - 2) + 1;
+        if((*grid)[x][y] == '.'){
+            (*grid)[x][y] = hero[i].class;
+            ++i;
+        }
+    }
+    i = 0;
+    while(i < numberOfEnemies){
+        int x = rand() % (rows - 2) + 1;
+        int y = rand() % (col - 2) + 1;
+        if((*grid)[x][y] == '.'){
+            (*grid)[x][y] = '0' + enemy[i].health;
+            ++i;
+        }
+    }
 }
 
 void freeGrid(char ***grid, int rows){
@@ -196,7 +209,7 @@ void drawHorizontal(char ***grid, Walls wall[], int rows, int col, int count){
     createDoor(grid, wall[count - 1].row, col - 2, wall[count - 1].column + 1);
 }
 
-void createGrid(char ***grid, int rows, int col){
+void createGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], int numberOfE, int rows, int col){
 
     //Create the starting grid.
     printf("Generating map...\n");
@@ -226,9 +239,8 @@ void createGrid(char ***grid, int rows, int col){
     free(lowerWalls);
     createHallway(grid, rows, col);
     genFurniture(grid, rows, col); //Generate furniture (>= 1 per room).
-    clearEntr(grid, rows, col);
-    //spawnHeroes();//Place heroes
-    //spawnEnemies();//Place enemies
+    clearHall(grid, rows, col);
+    spawnEntities(grid, hero, partySize, enemy, numberOfE, rows, col); //Place heroes and enemies
     system("PAUSE");
 }
 
@@ -253,14 +265,8 @@ void printGrid(char ***grid, int rows, int col, Hero hero[], Enemy enemy[], int 
         }
         printf("\n");
     }
-    /*
     printf("\n");
     for(int i = 0; i < partySize; ++i){
         printf("%c: %d ", hero[i].class, hero[i].health);
     }
-    printf("\n");
-    for(int i = 0; i < enemyCount; ++i){
-        printf("%d ", enemy[i].health);
-    }
-    */
 }

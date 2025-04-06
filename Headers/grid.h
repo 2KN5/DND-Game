@@ -16,10 +16,11 @@ typedef struct Walls {
     int column;
 } Walls;
 
-void genFurniture(char ***grid, int rows, int col);
-void createGrid(char ***grid, int rows, int col);
 int numberOfDig(int x);
+int validString(char c[]);
 void returnColChar(int x, int width);
+void genFurniture(char ***grid, int rows, int col);
+void createGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], int numberOfE, int rows, int col);
 void printGrid(char ***grid, int rows, int col, Hero hero[], Enemy enemy[], int partySize, int enemyCount, char *dif);
 void freeGrid(char ***grid, int rows);
 

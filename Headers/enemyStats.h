@@ -6,7 +6,7 @@
 
 #define MAX_MONSTER_COUNT 6
 
-typedef struct Enemy {
+typedef struct {
     int numberOfMoves;
     int damage;
     int shields;

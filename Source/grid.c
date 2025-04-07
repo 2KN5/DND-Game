@@ -19,31 +19,6 @@ int numberOfDig(int x){
     return c;
 }
 
-void genFurnPerRoom(char ***grid, int rows, int col, int **roomMap, int numberOfRooms){
-    for(int room = 1; room <= numberOfRooms; ++room){
-        int count = 0, roomArea[rows * col][2];
-
-        //Get area for each room.
-        for(int i = 1; i < rows - 1; ++i){
-            for(int j = 1; j < col - 1; ++j){
-                if((*grid)[i][j] == '.' && roomMap[i][j] == room){
-                    roomArea[count][0] = i;
-                    roomArea[count][1] = j;
-                    ++count;
-                }
-            }
-        }
-
-        //Place 1 furniture at a random spot.
-        if(count > 0){
-            int randSpot = rand() % count;
-            int x = roomArea[randSpot][0];
-            int y = roomArea[randSpot][1];
-            (*grid)[x][y] = '@';
-        }
-    }
-}
-
 void genFurniture(char ***grid, int rows, int col, int **roomMap){
     int lowerBound = 1, upperBound = (int)fmax(1.0, (rows * col) * 0.04);
     int numberOfFurniture = rand() % (upperBound + lowerBound - 1) + lowerBound, attempts = 0;
@@ -96,7 +71,7 @@ void countRooms(char **grid, int rows, int col, int ***roomMap, int *count){
     }
 }   
 
-void clearHall(char ***grid, int rows, int col){
+void clear_Rooms_Hallway(char ***grid, int rows, int col){
     for(int i = 0; i < rows; ++i){
         for(int j = 0; j < col; ++j){
             if((*grid)[i][j] == '&') (*grid)[i][j] = '.';
@@ -104,7 +79,7 @@ void clearHall(char ***grid, int rows, int col){
     }
 }
 
-void spawnEntities(char ***grid, Hero hero[], int numberOfHeroes, Enemy enemy[], int numberOfEnemies, int rows, int col){
+void spawnHeroes(char ***grid, Hero hero[], int numberOfHeroes, int rows, int col){
     int i = 0;
     while(i < numberOfHeroes){
         int x = rand() % (rows - 2) + 1;
@@ -114,14 +89,46 @@ void spawnEntities(char ***grid, Hero hero[], int numberOfHeroes, Enemy enemy[],
             ++i;
         }
     }
-    i = 0;
-    while(i < numberOfEnemies){
-        int x = rand() % (rows - 2) + 1;
-        int y = rand() % (col - 2) + 1;
+}
+
+void spawnEnemies(char ***grid, Enemy enemy[], int numberOfEnemies, int rows, int col, int roomArea[rows * col][2], int count){
+    int noe = 0, attempts = 0;
+    while(noe < numberOfEnemies && attempts < 1000){
+        int x = roomArea[rand() % count][0];
+        int y = roomArea[rand() % count][1];
         if((*grid)[x][y] == '.'){
-            (*grid)[x][y] = '0' + enemy[i].health;
-            ++i;
+            (*grid)[x][y] = '0' + enemy[noe].health;
+            ++noe;
         }
+        ++attempts;
+    }
+}
+
+void gen_Furniture_Enemies(char ***grid, Enemy enemy[], int rows, int col, int **roomMap, int numberOfRooms, char dif[]){
+    for(int room = 1; room <= numberOfRooms; ++room){
+        int count = 0, roomArea[rows * col][2];
+
+        //Get area for each room.
+        for(int i = 1; i < rows - 1; ++i){
+            for(int j = 1; j < col - 1; ++j){
+                if((*grid)[i][j] == '.' && roomMap[i][j] == room){
+                    roomArea[count][0] = i;
+                    roomArea[count][1] = j;
+                    ++count;
+                }
+            }
+        }
+
+        //Place 1 furniture at a random spot.
+        if(count > 0){
+            int randSpot = rand() % count;
+            int x = roomArea[randSpot][0];
+            int y = roomArea[randSpot][1];
+            (*grid)[x][y] = '@';
+        }
+        int numberOfEnemies;
+        enemyStats(enemy, dif, &numberOfEnemies);
+        spawnEnemies(grid, enemy, numberOfEnemies, rows, col, roomArea, count);
     }
 }
 
@@ -136,13 +143,13 @@ void drawVertical_TOP(char ***grid, Walls wall[], int rows, int col, int *count)
 
     //Values.
     *count = 0;
-    int MIN_WALL_SPACE = (int)fmax(3.0, col * 0.1f), start = rand() % ((col / 2) - 1) + 2;;
+    int MIN_WALL_SPACE = (int)fmax(3.0, col * 0.1f), start = rand() % ((col / 2) - 1) + 3;
     int upperBound = (rows % 2 != 0 ? (int)(rows / 2) - 1 : (rows / 2) - 1);
     int lowerBound = (rows >= 8 ? 3 : 2);
     
     //Draw Walls.
     if(lowerBound > upperBound) return;
-    for(int j = start; j < col - 2; j += MIN_WALL_SPACE){
+    for(int j = start; j < col - 3; j += MIN_WALL_SPACE){
         if(*count == 0 || rand() % 3 != 0){
             int wallHeight = rand() % (upperBound - lowerBound + 1) + lowerBound;
             for(int i = 1; i <= wallHeight; ++i){
@@ -175,13 +182,13 @@ void drawVertical_BOTTOM(char ***grid, Walls wall[], int rows, int col, int *cou
 
     //Values.
     *count = 0;
-    int MIN_WALL_SPACE = (int)fmax(3.0, col * 0.1f), start = rand() % ((col / 2) - 1) + 2;
+    int MIN_WALL_SPACE = (int)fmax(3.0, col * 0.1f), start = rand() % ((col / 2) - 1) + 3;
     int upperBound = (rows >= 9 ? rows - 4 : rows - 3);
     int lowerBound = (rows % 2 != 0 ? (rows + 1) / 2 : (rows / 2) + 1);
     
     //Draw Walls.
     if(lowerBound > upperBound) return;
-    for(int j = start; j < col - 2; j += MIN_WALL_SPACE){
+    for(int j = start; j < col - 3; j += MIN_WALL_SPACE){
         if(*count == 0 || rand() % 3 != 0){
             int wallHeight = rand() % (upperBound - lowerBound + 1) + lowerBound;
             for(int i = wallHeight; i < rows - 1; ++i){
@@ -257,7 +264,7 @@ void drawHorizontal(char ***grid, Walls wall[], int rows, int col, int count){
     createDoor(grid, wall[count - 1].row, col - 2, wall[count - 1].column + 1);
 }
 
-void createGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], int numberOfE, int rows, int col){
+void createGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], char dif[], int rows, int col){
 
     //Create the starting grid.
     printf("Generating map...\n");
@@ -293,10 +300,10 @@ void createGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], int num
     int count;
     countRooms(*grid, rows, col, &roomMap, &count);
     printf("\nHERE: %d\n", count);
-    genFurnPerRoom(grid, rows, col, roomMap, count); // Generate at least 1 furniture per room.
+    gen_Furniture_Enemies(grid, enemy, rows, col, roomMap, count, dif); // Generate at least 1 furniture per room.
     //genFurniture(grid, rows, col, roomMap); // Generate a couple more furniture.
-    clearHall(grid, rows, col);
-    spawnEntities(grid, hero, partySize, enemy, numberOfE, rows, col); //Place heroes and enemies
+    clear_Rooms_Hallway(grid, rows, col);
+    spawnHeroes(grid, hero, partySize, rows, col); //Place heroes and enemies
     
     //Free roomMap grid, can't use freeGrid, char not int
     for(int i = 0; i < rows; ++i){

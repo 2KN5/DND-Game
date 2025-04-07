@@ -6,7 +6,7 @@
 
 #define MAX_PARTY_SIZE 4
 
-typedef struct Hero {
+typedef struct {
     char class;
     int numberOfMoves;
     int damage;

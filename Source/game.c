@@ -45,6 +45,7 @@ int main(void){
     readMS(&rows, &col);
     createGrid(&grid, hero, pSize, enemy, mCount, rows, col);
     printGrid(&grid, rows, col, hero, enemy, pSize, mCount, dif);
+    /*
     printf("\n\nWelcome to the dungeon Player!\nTime to begin.\nMake your move: ");
     char move[28];
     while(1){
@@ -57,6 +58,7 @@ int main(void){
         break;
     }
     printf("%s\n", move);
+    */
     freeGrid(&grid, rows);
     return 0;
 }

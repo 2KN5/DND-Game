@@ -120,12 +120,14 @@ void gen_Furniture_Enemies(char ***grid, Enemy enemy[], int rows, int col, int *
         }
 
         //Place 1 furniture at a random spot.
-        if(count > 0){
+        if(count > 0){ //Check if we've encountered at least one floor tile.
             int randSpot = rand() % count;
             int x = roomArea[randSpot][0];
             int y = roomArea[randSpot][1];
             (*grid)[x][y] = '@';
         }
+
+        //Spawn the enemies in every room.
         int numberOfEnemies;
         enemyStats(enemy, dif, &numberOfEnemies);
         spawnEnemies(grid, enemy, numberOfEnemies, rows, col, roomArea, count);
@@ -314,7 +316,7 @@ void createGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], char di
     system("PAUSE");
 }
 
-void printGrid(char ***grid, int rows, int col, Hero hero[], Enemy enemy[], int partySize, int enemyCount, char *dif){
+void printGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], char *dif, int rows, int col){
 
     printf("Creating map...\n");
     //Using the largest number as the width specifier.

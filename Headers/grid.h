@@ -20,7 +20,7 @@ int numberOfDig(int x);
 int validString(char c[]);
 void returnColChar(int x, int width);
 void createGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], char dif[], int rows, int col);
-void printGrid(char ***grid, int rows, int col, Hero hero[], Enemy enemy[], int partySize, int enemyCount, char *dif);
+void printGrid(char ***grid, Hero hero[], int partySize, Enemy enemy[], char *dif, int rows, int col);
 void freeGrid(char ***grid, int rows);
 
 #endif

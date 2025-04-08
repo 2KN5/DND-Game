@@ -15,9 +15,9 @@ void readMS(int *rows, int *col){
     char buffer[100] = {' '};
     while(buffer[0] != '\n'){
         clearScreen();
-        printf("MAP RESTRICTIONS -> Has to be at least 5x5, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");
+        printf("MAP RESTRICTIONS -> Has to be at least 6x6, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");
         printf("Enter map size(N x M): ");
-        while(scanf("%d%d", rows, col) != 2 || *rows < 5 || *col < 5 || *col > 92){
+        while(scanf("%d%d", rows, col) != 2 || *rows < 6 || *col < 6 || *col > 92){
             clearScreen();
             printf("MAP RESTRICTIONS -> Has to be at least 5x5, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");
             printf("Enter map size(N x M): ");
@@ -31,7 +31,7 @@ int main(void){
 
     srand(time(NULL));
 
-    int pSize, rows, col, mCount;
+    int pSize, rows, col;
     char **grid, dif[10];
     Hero hero[MAX_PARTY_SIZE];
     menu(hero, &pSize, dif);
@@ -43,7 +43,7 @@ int main(void){
     readMS(&rows, &col);
     Enemy *enemy = malloc(sizeof(Enemy) * (rows * col));
     createGrid(&grid, hero, pSize, enemy, dif, rows, col);
-    printGrid(&grid, rows, col, hero, enemy, pSize, mCount, dif);
+    printGrid(&grid, hero, pSize, enemy, dif, rows, col);
     /*
     printf("\n\nWelcome to the dungeon Player!\nTime to begin.\nMake your move: ");
     char move[28];

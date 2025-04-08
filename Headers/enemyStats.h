@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_MONSTER_COUNT 6
-
 typedef struct {
     int numberOfMoves;
     int damage;

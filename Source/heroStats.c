@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include "heroStats.h"
 
-void stats(Hero h[], int count)
+void stats(Hero h[])
 {
-    for(int i = 0; i < count; i++)
+    for(int i = 0; i < h->numberOfHeroes; i++)
     {
         if(h[i].class == 'B'){
             h[i].health = 8;

@@ -8,6 +8,7 @@
 
 typedef struct {
     char class;
+    int numberOfHeroes;
     int numberOfMoves;
     int damage;
     int shields;
@@ -15,6 +16,6 @@ typedef struct {
     int x, y;
 } Hero;
 
-void stats(Hero h[], int count);
+void stats(Hero h[]);
 
 #endif

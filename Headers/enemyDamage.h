@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "enemyStats.h"
-#include "roll.h"
+#include "commonFunc.h"
 
 void enemyDamage(Enemy *enemy);
 void enemyDefence(Enemy *enemy);

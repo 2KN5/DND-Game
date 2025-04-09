@@ -4,11 +4,6 @@
 #include <ctype.h>
 #include "mainMenu.h"
 
-void clearBuffer(){
-    int c, i = 0;
-    while((c = getchar()) != '\n' && c != EOF);
-}
-
 int validString(char c[]){
     if(c[strlen(c) - 1] != '\n'){
         clearBuffer();
@@ -18,12 +13,6 @@ int validString(char c[]){
     } else {
         c[strlen(c) - 1] = '\0';
         return 0;
-    }
-}
-
-void upperString(char *str){
-    for(int i = 0; str[i] != '\0'; ++i){
-        str[i] = toupper(str[i]);
     }
 }
 
@@ -39,6 +28,7 @@ void clearHero(Hero h[]){
     for(int i = 0; i < MAX_PARTY_SIZE; ++i){
         h[i].class = ' ';
     }
+    h->numberOfHeroes = 0;
 }
 
 void printChoices(char *str, Hero h[], int noh, char *first){
@@ -77,7 +67,7 @@ void printChoices(char *str, Hero h[], int noh, char *first){
     }
 }
 
-void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
+void menu(Hero hero[MAX_PARTY_SIZE], char dif[]){
 
     int n;
     char choice;
@@ -109,12 +99,12 @@ void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
         if(n != MAX_PARTY_SIZE){
 
             //Choose class for each hero.
-            *partySize = 0;
-            while(*partySize < n){
+            int partySize = 0;
+            while(partySize < n){
                 
                 //Menu
                 char chooseClass[3]; 
-                printf("Heroes left: %d\n\n", n - *partySize);
+                printf("Heroes left: %d\n\n", n - partySize);
                 printf("(B) Barbarian, (D) Dwarf, (E) Elf, (W) Wizard.\n");
                 printf("Select a hero type -> ( B / D / E / W): ");
                 fgets(chooseClass, sizeof(chooseClass), stdin);
@@ -136,7 +126,7 @@ void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
                     continue;
                 }
                 int dup = 0;
-                for(int i = 0; i < *partySize; ++i){
+                for(int i = 0; i < partySize; ++i){
                     if(chooseClass[0] == hero[i].class){
                         dup = 1;
                         break;
@@ -145,19 +135,20 @@ void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]){
                 if(dup){
                     printf("You've already selected a (%c) hero! Choose a different class.\n\n", chooseClass[0]);
                 } else {
-                    hero[*partySize].class = chooseClass[0];
-                    ++(*partySize);
+                    hero[partySize].class = chooseClass[0];
+                    ++(partySize);
                 }
             }
+            hero->numberOfHeroes = partySize;
         } else {
             //If player selected 4, initiate their values.
             hero[0].class = 'B';
             hero[1].class = 'W';
             hero[2].class = 'E';
             hero[3].class = 'D';
-            *partySize = 4;
+            hero->numberOfHeroes = 4;
         }
-
+        
         //Set difficulty.
         printf("Choose the difficulty -> (Easy, Medium, Hard): ");
         while(1){

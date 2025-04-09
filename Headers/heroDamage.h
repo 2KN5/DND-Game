@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "heroStats.h"
-#include "roll.h"
+#include "commonFunc.h"
 
 void heroDamage(Hero *hero);
 void heroDefence(Hero *hero);

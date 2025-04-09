@@ -5,14 +5,13 @@
 #include <stdlib.h>
 #include "heroStats.h"
 #include "enemyStats.h"
-#include "clearScreen.h"
+#include "commonFunc.h"
 
-void clearBuffer();
 int validString(char c[]);
 void upperString(char *str);
 int check(char *choice);
 void clearHero(Hero h[]);
 void printChoices(char *str, Hero h[], int noh, char *first);
-void menu(Hero hero[MAX_PARTY_SIZE], int *partySize, char dif[]);
+void menu(Hero hero[MAX_PARTY_SIZE], char dif[]);
 
 #endif

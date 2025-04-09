@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 typedef struct {
+    int numberOfEnemies;
     int numberOfMoves;
     int damage;
     int shields;

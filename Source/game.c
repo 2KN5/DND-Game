@@ -8,19 +8,23 @@ int main(void){
 
     int rows, col;
     char **grid, dif[10];
-    Hero hero[MAX_PARTY_SIZE];
-    menu(hero, dif);
-    
-    //Initialize hero stats.
-    stats(hero);
-    
-    //Generate the map
-    readMS(&rows, &col);
-    Enemy *enemy = malloc(sizeof(Enemy) * (rows * col));
-    createGrid(&grid, hero, enemy, dif, rows, col);
 
+    HeroData heroes;
+    EnemyData enemies;
+
+    menu(&heroes, dif);
+    heroStats(&heroes);
+    
+    //Set map restrictions.
+    readMS(&rows, &col);
+    enemies.data = malloc(sizeof(Enemy) * (rows * col));
+    
+    //Generate the map.
+    createGrid(&grid, rows, col, &heroes, &enemies, dif);
+    printGrid(&grid, rows, col, heroes, enemies, dif);
+    
     //Welcome to the dungeon!
-    startGame(&grid, hero, enemy, dif, rows, col);
+    startGame(&grid, rows, col, &heroes, &enemies, dif);
     
     //Free the grid.
     freeGrid(&grid, rows);

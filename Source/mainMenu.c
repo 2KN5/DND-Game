@@ -24,14 +24,14 @@ int check(char *choice){
     return (*choice == 'N' || *choice == 'Y' ? 1 : 0);
 }
 
-void clearHero(Hero h[]){
+void clearHero(HeroData *heroes){
     for(int i = 0; i < MAX_PARTY_SIZE; ++i){
-        h[i].class = ' ';
+        heroes->data[i].class = ' ';
     }
-    h->numberOfHeroes = 0;
+    heroes->numberOfHeroes = 0;
 }
 
-void printChoices(char *str, Hero h[], int noh, char *first){
+void printChoices(HeroData *heroes, char str[], char *first, int noh){
     char second;
     while(1){
 
@@ -40,7 +40,7 @@ void printChoices(char *str, Hero h[], int noh, char *first){
         printf("GAME SETTINGS\n\n");
         printf("DIFFICULTY: %s\nYOUR PARTY INVOLVES: ", str);
         for(int i = 0; i < noh; ++i){
-            printf("%c ", h[i].class);
+            printf("%c ", heroes->data[i].class);
         }
 
         //First question: ...
@@ -50,24 +50,25 @@ void printChoices(char *str, Hero h[], int noh, char *first){
         if(*first == 'Y'){
             return; // Exit to starting menu.
         }
+
         //Second question: ...
         while(1){
             printf("Would you like to change your choices? (Y/N): ");
             if(!check(&second)){
                 clearScreen();
-                printf("Invalid Statement!\n\n", second);
+                printf("Invalid Statement!\n\n");
                 continue;
             }
             break;
         }
         if(second == 'Y'){ //Exit to the starting menu.
-            clearHero(h);
+            clearHero(heroes);
             return;
         } 
     }
 }
 
-void menu(Hero hero[MAX_PARTY_SIZE], char dif[]){
+void menu(HeroData *hero, char dif[]){
 
     int n;
     char choice;
@@ -127,7 +128,7 @@ void menu(Hero hero[MAX_PARTY_SIZE], char dif[]){
                 }
                 int dup = 0;
                 for(int i = 0; i < partySize; ++i){
-                    if(chooseClass[0] == hero[i].class){
+                    if(chooseClass[0] == hero->data[i].class){
                         dup = 1;
                         break;
                     }
@@ -135,17 +136,17 @@ void menu(Hero hero[MAX_PARTY_SIZE], char dif[]){
                 if(dup){
                     printf("You've already selected a (%c) hero! Choose a different class.\n\n", chooseClass[0]);
                 } else {
-                    hero[partySize].class = chooseClass[0];
+                    hero->data[partySize].class = chooseClass[0];
                     ++(partySize);
                 }
             }
             hero->numberOfHeroes = partySize;
         } else {
             //If player selected 4, initiate their values.
-            hero[0].class = 'B';
-            hero[1].class = 'W';
-            hero[2].class = 'E';
-            hero[3].class = 'D';
+            hero->data[0].class = 'B';
+            hero->data[1].class = 'W';
+            hero->data[2].class = 'E';
+            hero->data[3].class = 'D';
             hero->numberOfHeroes = 4;
         }
         
@@ -170,7 +171,7 @@ void menu(Hero hero[MAX_PARTY_SIZE], char dif[]){
             }
             break;
         }
-        printChoices(dif, hero, n, &choice);
+        printChoices(hero, dif, &choice, hero->numberOfHeroes);
         clearScreen();
         if(choice == 'Y') return;
     }

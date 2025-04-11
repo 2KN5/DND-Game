@@ -8,10 +8,9 @@
 #include "commonFunc.h"
 
 int validString(char c[]);
-void upperString(char *str);
 int check(char *choice);
-void clearHero(Hero h[]);
-void printChoices(char *str, Hero h[], int noh, char *first);
-void menu(Hero hero[MAX_PARTY_SIZE], char dif[]);
+void clearHero(HeroData *heroes);
+void printChoices(HeroData *hero, char str[], char *first, int noh);
+void menu(HeroData *hero, char dif[]);
 
 #endif

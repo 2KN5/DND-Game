@@ -8,14 +8,18 @@
 
 typedef struct {
     char class;
-    int numberOfHeroes;
-    int numberOfMoves;
+    int x, y;
     int damage;
     int shields;
     int health;
-    int x, y;
+    int numberOfMoves;
 } Hero;
 
-void stats(Hero h[]);
+typedef struct {
+    Hero data[MAX_PARTY_SIZE];
+    int numberOfHeroes;
+} HeroData;
+
+void heroStats(HeroData *hero);
 
 #endif

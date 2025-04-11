@@ -10,10 +10,10 @@
 #include "enemyStats.h"
 #include "heroDamage.h"
 #include "heroStats.h"
-#include "playerMovement.h"
+#include "playerCommands.h"
 #include "mainMenu.h"
 #include "commonFunc.h"
 
-void startGame(char ***grid, Hero hero[], Enemy enemy[], char dif[], int rows, int col);
+void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]);
 
 #endif

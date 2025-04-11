@@ -5,7 +5,6 @@
 #include <stdlib.h>
 
 typedef struct {
-    int numberOfEnemies;
     int numberOfMoves;
     int damage;
     int shields;
@@ -13,6 +12,12 @@ typedef struct {
     int x, y;
 } Enemy;
 
-void enemyStats(Enemy e[], char *dif, int *monsterCount);
+typedef struct {
+    Enemy *data;
+    int totalEnemies;
+    int enemiesPerRoom;
+} EnemyData;
+
+void enemyStats(EnemyData *enemy, char dif[]);
 
 #endif

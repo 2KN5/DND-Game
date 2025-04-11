@@ -8,7 +8,6 @@
 #include "commonFunc.h"
 
 int validString(char c[]);
-int check(char *choice);
 void clearHero(HeroData *heroes);
 void printChoices(HeroData *hero, char str[], char *first, int noh);
 void menu(HeroData *hero, char dif[]);

@@ -9,8 +9,12 @@
 #include "enemyStats.h"
 #include "commonFunc.h"
 
+int checkValidMoves(char moves[], int length);
+int checkAttack(char attack[], int length);
+int isHero(char c, HeroData heroes);
 int checkValidLetters(char move[], int length, HeroData heroes);
 int checkString(char str[], int length, HeroData heroes);
-int makeMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies);
+char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies);
+void applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char move);
 
 #endif

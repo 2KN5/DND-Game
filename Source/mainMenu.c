@@ -16,14 +16,6 @@ int validString(char c[]){
     }
 }
 
-int check(char *choice){
-    char buffer[100];
-    fgets(buffer, sizeof(buffer), stdin);
-    if(buffer[1] != '\n') return 0;
-    *choice = toupper(buffer[0]);
-    return (*choice == 'N' || *choice == 'Y' ? 1 : 0);
-}
-
 void clearHero(HeroData *heroes){
     for(int i = 0; i < MAX_PARTY_SIZE; ++i){
         heroes->data[i].class = ' ';

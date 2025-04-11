@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include "playerCommands.h"
 
-int checkAttack(char attack[], int length){
-    int curr = 3;
-    if(attack[curr] != '*') return 0;
-}
-
 int checkValidMoves(char moves[], int length){
 
     //Check if it's an attack.
@@ -25,6 +20,12 @@ int checkValidMoves(char moves[], int length){
             ++currMove;
         }
     }
+    return 1;
+}
+
+int checkAttack(char attack[], int length){
+    int curr = 3;
+    if(attack[curr] == '*' && (attack[curr - 1] != 'A' || attack[0] == 'M')) return 0;
     return 1;
 }
 
@@ -53,22 +54,28 @@ int checkString(char str[], int length, HeroData heroes){
     } else {
         str[length] = '\0';
         if(!checkValidLetters(str, length, heroes)) return 0;
-        if(isHero(str[0], heroes)){
-            return checkValidMoves(str, length - 1);
-        } else if(str[0] == 'M'){
-            
-        }
+        return checkAttack(str, length - 1);
         return 1;
     }
 }
 
-int makeMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies){
+char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies){
     char move[28];
-    printf("Make your move: ");
+    printf("\nMake your move: ");
     fgets(move, sizeof(move), stdin);
     int length = strlen(move) - 1;
     if(!checkString(move, length, heroes)){
-        return 0;
+        return 'I';
     }
-    return 1;
+    if(move[0] == 'M' || move[0] == 'X' || move[0] == 'Q'){
+        return move[0];
+    } else if(move[3] == '*'){
+        return 'A';
+    } else {
+        return 'O';
+    }
+}
+
+void applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char move){
+    
 }

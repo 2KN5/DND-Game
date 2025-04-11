@@ -363,8 +363,4 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
     for(int i = 0; i < hero.numberOfHeroes; ++i){
         printf("%c: %d, at X: %d, Y: %d\n", hero.data[i].class, hero.data[i].health, hero.data[i].x + 1, hero.data[i].y + 1);
     }
-    printf("\n\nNumber of enemies: %d\n", enemy.totalEnemies);
-    for(int i = 0; i < enemy.totalEnemies; ++i){
-        printf("%d , at X: %d, Y: %d\n", enemy.data[i].health, enemy.data[i].x + 1, enemy.data[i].y + 1);
-    }
 }

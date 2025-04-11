@@ -5,6 +5,14 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+static inline int check(char *choice){
+    char buffer[100];
+    fgets(buffer, sizeof(buffer), stdin);
+    if(buffer[1] != '\n') return 0;
+    *choice = toupper(buffer[0]);
+    return (*choice == 'N' || *choice == 'Y' ? 1 : 0);
+}
+
 static inline void upperString(char *str){
     for(int i = 0; str[i] != '\0'; ++i){
         str[i] = toupper(str[i]);

@@ -19,5 +19,6 @@ typedef struct {
 } EnemyData;
 
 void enemyStats(EnemyData *enemy, char dif[]);
+void spawnSingleEnemy(EnemyData *enemy, char dif[], int x, int y);
 
 #endif

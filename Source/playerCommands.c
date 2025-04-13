@@ -58,7 +58,7 @@ int returnColNumber(char letters[]){
 
 int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[]){
     char letters[3] = "", numbers[3] = "";
-    int length = strlen(str) - 1;
+    int length = strlen(str) - 1, saveIndex = index - 1;
 
     //Get column coordinates.
     int i = 0;
@@ -82,9 +82,11 @@ int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[
     numbers[j] = '\0';
     *x = atoi(numbers) - 1;
     if(*x <= 0 || *x >= rows - 1) return 0;
-    
+
     //Coordinates so I can print them later on.
     pos[j + i] = '\0';
+    if(strlen(pos) != length - saveIndex) return 0;
+
     return 1;
 }
 
@@ -99,18 +101,23 @@ void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], in
     if((*grid)[x][y] == '.'){
         spawnSingleEnemy(enemies, dif, x, y);
         (*grid)[x][y] = '0' + enemies->data[enemies->totalEnemies - 1].health;
-        printf("Spawning enemy at position: %s\n", pos);
+        printf("\nSpawning enemy at position: %s\n\n", pos);
         system("PAUSE");
     } else {
+        int isEnemy = 0;
         for(int i = 0; i < enemies->totalEnemies; ++i){
             if(enemies->data[i].x == x && enemies->data[i].y == y){
                 (*grid)[x][y] = '.';
                 shiftEnemies(enemies, i);
-                printf("Eliminating enemy at position: %s\n", pos);
+                printf("\nEliminating enemy at position: %s\n\n", pos);
                 system("PAUSE");
+                isEnemy = 1;
                 return;
             }
         }
+        printf("\nYou can only Create/Destroy enemies on floor tiles (.) !\n\n"); 
+        system("PAUSE");
+        return;
     }
 }
 
@@ -135,18 +142,55 @@ char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemi
         return 'I';
     }
     if(move[0] == 'M' || move[0] == 'X' || move[0] == 'Q'){
-        printf("Valid Command!\n");
-        system("PAUSE");
         return move[0];
     } else if(move[3] == '*'){
-        printf("Valid Attack!\n");
-        system("PAUSE");
         return 'A';
     } else {
-        printf("Valid Move!\n");
-        system("PAUSE");
         return 'O';
     }
+}
+
+int validCell(HeroData heroes, int x, int y, char hero){
+    int index = 0;
+    for(int i = 0; i < heroes.numberOfHeroes; ++i){
+        if(heroes.data[i].class == hero){
+            index = i;
+            break;
+        }
+    }
+
+    int dx = abs(heroes.data[index].x - x);
+    int dy = abs(heroes.data[index].y - y);
+    if(heroes.data[index].class == 'B'){
+        if(dx + dy == 1) return 1;
+    } else if(heroes.data[index].class == 'D'){
+        if(dx + dy >= 1 && (dx <= 1 && dy <= 1)) return 1;
+    } else if(heroes.data[index].class == 'E'){
+        if((dx == 0 && dy > 1) || (dy == 0 && dx > 1)) return 1;
+    } else if(heroes.data[index].class == 'W'){
+        if(dx + dy >= 1 && (dx == 0 || dy == 0)) return 1;
+    }
+    return 0;
+}
+
+int canAttack(char ***grid, int rows, int col, int x, int y, HeroData heroes, char move[]){
+    /*
+    I think this works for everyone
+
+    X-axis
+
+    check if (currentPosX -+ count) is out of bounds
+    for(int i = currentPosX; i >= currentPosX - count; --i) //For going up
+    for(int i = currentPosX; i < currentPosX + count; ++i) // For going down
+    grid[i][currentPosY] == '#'
+
+    Y-axis
+
+    check if (currentPosY -+ count) is out of bounds
+    for(int j = currentPosY; j >= currentPosY - count; --j) //For going left
+    for(int j = currentPosY; j < currentPosY + count; ++j) // For going right
+    grid[currentPosX][j] == '#'
+    */
 }
 
 int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]){
@@ -157,6 +201,13 @@ int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enem
         if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
         cdEnemy(grid, rows, col, enemies, dif, x, y, position);
     } else if(command == 'A'){
+        int curr = 4;
+        if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
+        if(!validCell(*heroes, x, y, move[0])) return 0;
+        printf("Valid Attack at %s!\n", position);
+        system("PAUSE");
+        if(!canAttack(grid, rows, col, x, y, *heroes, move)) return 0;
+
         return 1;
     } else {
         return 2;

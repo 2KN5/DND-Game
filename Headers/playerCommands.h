@@ -8,14 +8,29 @@
 #include <math.h>
 #include "heroStats.h"
 #include "enemyStats.h"
+#include "heroMove.h"
+#include "enemyMove.h"
 #include "commonFunc.h"
 
+// Movement and input
+char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char move[]);
+int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]);
+
+// String and position parsing
 int checkValidMoves(char moves[], int length);
 int checkAttack(char attack[], int length);
 int isHero(char c, HeroData heroes);
-int checkValidLetters(char move[], int length, HeroData heroes);
+int checkValidLetters(char command[], int length, HeroData heroes);
 int checkString(char str[], int length, HeroData heroes);
-char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char move[]);
-int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]);
+int returnColNumber(char letters[]);
+int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[]);
+
+// Enemy and hero mechanics
+void shiftEnemies(EnemyData *enemies, int index);
+void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], int x, int y, char pos[]);
+int validCell(HeroData heroes, int x, int y, int index);
+int canAttack(char ***grid, int rows, int col, int x, int y, HeroData heroes, char move[], int heroIndex);
+int getHeroIndex(HeroData heroes, char hero);
+int getEnemyIndex(EnemyData enemies, int x, int y);
 
 #endif

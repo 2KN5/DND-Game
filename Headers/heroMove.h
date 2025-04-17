@@ -1,0 +1,14 @@
+#ifndef HERO_MOVE_H
+#define HERO_MOVE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "heroStats.h"
+#include "enemyMove.h"
+#include "commonFunc.h"
+
+// Player actions
+void heroDamage(char ***grid, int x, int y, Hero hero, Enemy *enemy, char pos[]);
+int heroDefence(Hero hero);
+
+#endif

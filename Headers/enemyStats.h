@@ -6,10 +6,9 @@
 
 typedef struct {
     int numberOfMoves;
-    int damage;
-    int shields;
     int health;
     int x, y;
+    int isAlive;
 } Enemy;
 
 typedef struct {
@@ -18,7 +17,10 @@ typedef struct {
     int enemiesPerRoom;
 } EnemyData;
 
-void enemyStats(EnemyData *enemy, char dif[]);
+// Single enemy spawn, for the M command
 void spawnSingleEnemy(EnemyData *enemy, char dif[], int x, int y);
+
+// Applying the enemy stats
+void enemyStats(EnemyData *enemy, char dif[]);
 
 #endif

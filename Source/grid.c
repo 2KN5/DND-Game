@@ -312,7 +312,6 @@ void drawHorizontal(char ***grid, int rows, int col, Walls wall[], int count){
 void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]){
 
     //Create the starting grid.
-    printf("Generating map...\n");
     int **roomMap = (int**)malloc(sizeof(int*) * rows);
     *grid = (char**)malloc(sizeof(char*) * rows);
     for(int i = 0; i < rows; ++i){
@@ -360,7 +359,6 @@ void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enem
 
 void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, char dif[]){
 
-    printf("Creating map...\n");
     //Using the largest number as the width specifier.
     int width = numberOfDig(rows);
 
@@ -388,7 +386,7 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
             if(!isHero) continue;
             int isEnemy = 1;
             for(int k = 0; k < enemy.totalEnemies; ++k){
-                if(enemy.data[k].x == i && enemy.data[k].y == j){
+                if(enemy.data[k].x == i && enemy.data[k].y == j && enemy.data[k].isAlive){
                     printf("\033[0;31m");
                     printf("%2c ", (*grid)[i][j]);
                     printf("\033[0m");

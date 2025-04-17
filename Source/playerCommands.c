@@ -56,40 +56,6 @@ int returnColNumber(char letters[]){
     }
 }
 
-int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[]){
-    char letters[3] = "", numbers[3] = "";
-    int length = strlen(str) - 1, saveIndex = index - 1;
-
-    //Get column coordinates.
-    int i = 0;
-    while(index <= length && isalpha(str[index])){
-        letters[i] = str[index];
-        pos[i] = letters[i];
-        ++index; ++i;
-    }
-    letters[i] = '\0';
-    *y = returnColNumber(letters);
-    if(strlen(letters) < 1 || strlen(letters) > 2) return 0;
-    if(*y <= 0 || *y >= col - 1) return 0;
-
-    //Get row coordinates.
-    int j = 0;
-    while(index <= length && isdigit(str[index])){
-        numbers[j] = str[index];
-        pos[j + i] = numbers[j];
-        ++index; ++j;
-    }
-    numbers[j] = '\0';
-    *x = atoi(numbers) - 1;
-    if(*x <= 0 || *x >= rows - 1) return 0;
-
-    //Coordinates so I can print them later on.
-    pos[j + i] = '\0';
-    if(strlen(pos) != length - saveIndex) return 0;
-
-    return 1;
-}
-
 void shiftEnemies(EnemyData *enemies, int index){
     for(int i = index; i < enemies->totalEnemies - 1; ++i){
         enemies->data[i] = enemies->data[i + 1];
@@ -150,7 +116,18 @@ char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemi
     }
 }
 
-int validCell(HeroData heroes, int x, int y, char hero){
+int getEnemyIndex(EnemyData enemies, int x, int y){
+    int index = 0;
+    for(int i = 0; i < enemies.totalEnemies; ++i){
+        if(enemies.data[i].x == x && enemies.data[i].y == y){
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
+int getHeroIndex(HeroData heroes, char hero){
     int index = 0;
     for(int i = 0; i < heroes.numberOfHeroes; ++i){
         if(heroes.data[i].class == hero){
@@ -158,9 +135,48 @@ int validCell(HeroData heroes, int x, int y, char hero){
             break;
         }
     }
+    return index;
+}
+
+int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[]){
+    char letters[3] = "", numbers[3] = "";
+    int length = strlen(str) - 1, saveIndex = index - 1;
+
+    //Get column coordinates.
+    int i = 0;
+    while(index <= length && isalpha(str[index])){
+        letters[i] = str[index];
+        pos[i] = letters[i];
+        ++index; ++i;
+    }
+    letters[i] = '\0';
+    *y = returnColNumber(letters);
+    if(strlen(letters) < 1 || strlen(letters) > 2) return 0;
+    if(*y <= 0 || *y >= col - 1) return 0;
+
+    //Get row coordinates.
+    int j = 0;
+    while(index <= length && isdigit(str[index])){
+        numbers[j] = str[index];
+        pos[j + i] = numbers[j];
+        ++index; ++j;
+    }
+    numbers[j] = '\0';
+    *x = atoi(numbers) - 1;
+    if(*x <= 0 || *x >= rows - 1) return 0;
+
+    //Coordinates so I can print them later on.
+    pos[j + i] = '\0';
+    if(strlen(pos) != length - saveIndex) return 0;
+
+    return 1;
+}
+
+int validCell(HeroData heroes, int x, int y, int index){
 
     int dx = abs(heroes.data[index].x - x);
     int dy = abs(heroes.data[index].y - y);
+
     if(heroes.data[index].class == 'B'){
         if(dx + dy == 1) return 1;
     } else if(heroes.data[index].class == 'D'){
@@ -173,24 +189,38 @@ int validCell(HeroData heroes, int x, int y, char hero){
     return 0;
 }
 
-int canAttack(char ***grid, int rows, int col, int x, int y, HeroData heroes, char move[]){
-    /*
-    I think this works for everyone
+int canAttack(char ***grid, int rows, int col, int enemyX, int enemyY, HeroData heroes, char move[], int index){
+    if(isalpha((*grid)[enemyX][enemyY])){
+        printf("\nYou can't attack your allies!\n\n");
+        system("PAUSE");
+        return 0;
+    }
+    if(!isdigit((*grid)[enemyX][enemyY])){
+        printf("\nThat's not an enemy!\n\n");
+        system("PAUSE");
+        return 0;
+    }
+    if(heroes.data[index].class == 'W') return 1;
+    int dx = heroes.data[index].x - enemyX;
+    int dy = heroes.data[index].y - enemyY;
 
-    X-axis
-
-    check if (currentPosX -+ count) is out of bounds
-    for(int i = currentPosX; i >= currentPosX - count; --i) //For going up
-    for(int i = currentPosX; i < currentPosX + count; ++i) // For going down
-    grid[i][currentPosY] == '#'
-
-    Y-axis
-
-    check if (currentPosY -+ count) is out of bounds
-    for(int j = currentPosY; j >= currentPosY - count; --j) //For going left
-    for(int j = currentPosY; j < currentPosY + count; ++j) // For going right
-    grid[currentPosX][j] == '#'
-    */
+    //Checking attack validity for the elf, the others have been checked.
+    int stepX = (dx < 0 ? 1 : -1), stepY = (dy < 0 ? 1 : -1);
+    if(dx != 0){
+        int newX = heroes.data[index].x + stepX;
+        while(newX != enemyX ){
+            if((*grid)[newX][enemyY] != '.') return 0;
+            newX += stepX;
+        }
+    }
+    if(dy != 0){
+        int newY = heroes.data[index].y + stepY;
+        while(newY != enemyY){
+            if((*grid)[enemyX][newY] != '.') return 0;
+            newY += stepY;
+        }
+    }
+    return 1;
 }
 
 int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]){
@@ -201,16 +231,18 @@ int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enem
         if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
         cdEnemy(grid, rows, col, enemies, dif, x, y, position);
     } else if(command == 'A'){
-        int curr = 4;
+        int curr = 4, heroIndex = getHeroIndex(*heroes, move[0]);
         if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
-        if(!validCell(*heroes, x, y, move[0])) return 0;
-        printf("Valid Attack at %s!\n", position);
-        system("PAUSE");
-        if(!canAttack(grid, rows, col, x, y, *heroes, move)) return 0;
+        if(!validCell(*heroes, x, y, heroIndex)) return 0;
+        if(!canAttack(grid, rows, col, x, y, *heroes, move, heroIndex)) return 0;
+        int enemyIndex = getEnemyIndex(*enemies, x, y);
+        if(!enemies->data[enemyIndex].isAlive) return 0;
 
-        return 1;
+        //Get damage and apply it to the enemy.
+        printf("\nValid Attack at %s!\n\n", position);
+        heroDamage(grid, x, y, heroes->data[heroIndex], &enemies->data[enemyIndex], position);
     } else {
-        return 2;
+        
     }
-    return 3;
+    return 1;
 }

@@ -10,8 +10,6 @@ typedef struct {
     char class;
     char positionChar[7];
     int x, y;
-    int damage;
-    int shields;
     int health;
     int numberOfMoves;
 } Hero;
@@ -21,6 +19,7 @@ typedef struct {
     int numberOfHeroes;
 } HeroData;
 
+// Applying the hero stats
 void heroStats(HeroData *hero);
 
 #endif

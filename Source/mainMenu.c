@@ -60,7 +60,7 @@ void printChoices(HeroData *heroes, char str[], char *first, int noh){
     }
 }
 
-void menu(HeroData *hero, char dif[]){
+void menu(HeroData *hero, char dif[], int *exitGame){
 
     int n;
     char choice;
@@ -74,11 +74,11 @@ void menu(HeroData *hero, char dif[]){
         char buffer[100] = {' '}, msg[100] = {"You may assemble a party of up to %d unique heroes.\n\n"};
         while(buffer[0] != '\n'){
             printf(msg, MAX_PARTY_SIZE);
-            printf("Enter number of heroes (1-%d): ", MAX_PARTY_SIZE);
-            while(scanf("%d", &n) != 1 || n <= 0 || n > MAX_PARTY_SIZE){
+            printf("Enter number of heroes (1-%d) or (5) to Exit: ", MAX_PARTY_SIZE);
+            while(scanf("%d", &n) != 1 || n <= 0 || n > MAX_PARTY_SIZE + 1){
                 clearScreen();
                 printf("Wrong input! You may assemble a party of up to %d unique heroes.\n\n", MAX_PARTY_SIZE);
-                printf("Enter number of heroes (1-%d): ", MAX_PARTY_SIZE);
+                printf("Enter number of heroes (1-%d) or (5) to Exit: ", MAX_PARTY_SIZE);
                 clearBuffer();
             }
             fgets(buffer, sizeof(buffer), stdin);
@@ -87,7 +87,11 @@ void menu(HeroData *hero, char dif[]){
             if(buffer[0] != '\n') strcpy(msg, "Wrong input! You may assemble a party of up to %d unique heroes.\n\n");
             clearScreen();
         }
-
+        if(n == 5){
+            printf("\nExiting...\n");
+            *exitGame = 1;
+            return;
+        }
         printf("Perfect! You chose %d heroes!\n\n", n);
         if(n != MAX_PARTY_SIZE){
 

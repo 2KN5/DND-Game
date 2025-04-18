@@ -5,6 +5,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+static inline void shiftEnemies(EnemyData *enemies, int index){
+    for(int i = index; i < enemies->totalEnemies - 1; ++i){
+        enemies->data[i] = enemies->data[i + 1];
+    }
+    --(enemies->totalEnemies);
+}
+
 static inline int check(char *choice){
     char buffer[100];
     fgets(buffer, sizeof(buffer), stdin);

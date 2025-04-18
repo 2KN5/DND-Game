@@ -405,7 +405,7 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
         }
         printf("\n");
     }
-    printf("\n");
+    printf("\nTotal Enemies: %d\n\n", enemy.totalEnemies);
     for(int i = 0; i < hero.numberOfHeroes; ++i){
         printf("%c: %d, at %s\n", hero.data[i].class, hero.data[i].health, hero.data[i].positionChar);
     }

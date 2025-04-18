@@ -56,13 +56,6 @@ int returnColNumber(char letters[]){
     }
 }
 
-void shiftEnemies(EnemyData *enemies, int index){
-    for(int i = index; i < enemies->totalEnemies - 1; ++i){
-        enemies->data[i] = enemies->data[i + 1];
-    }
-    --(enemies->totalEnemies);
-}
-
 void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], int x, int y, char pos[]){
     if((*grid)[x][y] == '.'){
         spawnSingleEnemy(enemies, dif, x, y);
@@ -70,14 +63,12 @@ void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], in
         printf("\nSpawning enemy at position: %s\n\n", pos);
         system("PAUSE");
     } else {
-        int isEnemy = 0;
         for(int i = 0; i < enemies->totalEnemies; ++i){
             if(enemies->data[i].x == x && enemies->data[i].y == y){
                 (*grid)[x][y] = '.';
                 shiftEnemies(enemies, i);
                 printf("\nEliminating enemy at position: %s\n\n", pos);
                 system("PAUSE");
-                isEnemy = 1;
                 return;
             }
         }
@@ -236,11 +227,10 @@ int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enem
         if(!validCell(*heroes, x, y, heroIndex)) return 0;
         if(!canAttack(grid, rows, col, x, y, *heroes, move, heroIndex)) return 0;
         int enemyIndex = getEnemyIndex(*enemies, x, y);
-        if(!enemies->data[enemyIndex].isAlive) return 0;
 
         //Get damage and apply it to the enemy.
         printf("\nValid Attack at %s!\n\n", position);
-        heroDamage(grid, x, y, heroes->data[heroIndex], &enemies->data[enemyIndex], position);
+        heroDamage(grid, x, y, heroes->data[heroIndex], enemies, enemyIndex, position);
     } else {
         
     }

@@ -46,7 +46,6 @@ void freeGrid(char ***grid, int rows);
 
 // Column label utilities
 int numberOfDig(int x);
-void returnColChar(int x, char str[]);
 void printColChar(int x, int width);
 void getPositionChar(int x, int y, char pos[]);
 

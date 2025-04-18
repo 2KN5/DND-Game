@@ -8,23 +8,89 @@ int checkAttack(char attack[], int length){
     return 1;
 }
 
-int checkValidMoves(char moves[], int length){
-
-    //Check if it's an attack.
-    int currMove = 2;
-    if(moves[currMove] == 'A') return checkAttack(moves, length);
-
-    //Check if it's a valid move, followed by a number.
+int checkValidMoves(char moves[], int length, Hero hero){
     char validMoves[] = "UDLR";
+    int currMove = 2, totalMoves = 0;
+
+    // Check if it's a valid move, followed by a number.
     if(isalpha(moves[length])) return 0;
     while(currMove <= length){
+        int count = 0;
+        char str[3] = "\0";
         if(!strchr(validMoves, moves[currMove])) return 0;
         if(isalpha(moves[currMove + 1])) return 0;
         ++currMove;
-        while(currMove <= length && !isalpha(moves[currMove])){
-            if(ispunct(moves[currMove])) return 0;
-            ++currMove;
+        while(currMove <= length && isdigit(moves[currMove])){
+            str[count] = moves[currMove];
+            ++currMove; ++count;
         }
+        totalMoves += atoi(str);
+    }
+    if(totalMoves > hero.numberOfMoves) return 0;
+    return 1;
+}
+
+void updatePositionChar(int x, int y, char pos[]){
+    char numbers[3];
+    returnColChar(y, pos);
+    sprintf(numbers, "%d", x);
+    strcat(pos, "-");
+    strcat(pos, numbers);
+}
+
+int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *hero){
+    int currMove = 2, prevX = hero->x, prevY = hero->y;
+    char validMoves[] = "UDLR";
+
+    while(currMove <= length){
+        char str[3] = "\0", *ptr = strchr(validMoves, moves[currMove]);
+        int count = 0, nom, index = ptr - validMoves;
+
+        // Count number of steps.
+        ++currMove;
+        while(currMove <= length && isdigit(moves[currMove])){
+            str[count] = moves[currMove];
+            ++currMove; ++count;
+        }
+        nom = atoi(str); 
+        
+        // Checking direction.
+        int step, newLoc;
+        if(validMoves[index] == 'U' || validMoves[index] == 'D'){
+            step = (validMoves[index] == 'D' ? 1 : -1), newLoc = hero->x + (step * nom);
+            if(newLoc <= 0 || newLoc >= rows - 1){
+                printf("\nCan't go outside the map!\n\n");
+                system("PAUSE");
+                return 0;
+            }
+            for(int i = hero->x + step; i != newLoc + step; i += step){
+                if((*grid)[i][hero->y] != '.'){
+                    printf("\nObstacle encountered!\n\n");
+                    system("PAUSE");
+                    return 0;
+                }
+            }
+            hero->x = newLoc;
+        } else {
+            step = (validMoves[index] == 'R' ? 1 : -1), newLoc = hero->y + (step * nom);
+            if(newLoc <= 0 || newLoc >= col - 1){
+                printf("\nCan't go outside the map!\n\n");
+                system("PAUSE");
+                return 0;
+            }
+            for(int j = hero->y + step; j != newLoc + step; j += step){
+                if((*grid)[hero->x][j] != '.'){
+                    printf("\nObstacle encountered!\n\n");
+                    system("PAUSE");
+                    return 0;
+                }
+            }
+            hero->y = newLoc;
+        }
+        (*grid)[prevX][prevY] = '.';
+        prevX = hero->x; prevY = hero->y;
+        (*grid)[hero->x][hero->y] = hero->class;
+        updatePositionChar(hero->x + 1, hero->y, hero->positionChar);
     }
     return 1;
 }
@@ -133,7 +199,7 @@ int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[
     char letters[3] = "", numbers[3] = "";
     int length = strlen(str) - 1, saveIndex = index - 1;
 
-    //Get column coordinates.
+    // Get column coordinates.
     int i = 0;
     while(index <= length && isalpha(str[index])){
         letters[i] = str[index];
@@ -145,7 +211,7 @@ int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[
     if(strlen(letters) < 1 || strlen(letters) > 2) return 0;
     if(*y <= 0 || *y >= col - 1) return 0;
 
-    //Get row coordinates.
+    // Get row coordinates.
     int j = 0;
     while(index <= length && isdigit(str[index])){
         numbers[j] = str[index];
@@ -156,7 +222,7 @@ int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[
     *x = atoi(numbers) - 1;
     if(*x <= 0 || *x >= rows - 1) return 0;
 
-    //Coordinates so I can print them later on.
+    // Coordinates so I can print them later on.
     pos[j + i] = '\0';
     if(strlen(pos) != length - saveIndex) return 0;
 
@@ -195,11 +261,11 @@ int canAttack(char ***grid, int rows, int col, int enemyX, int enemyY, HeroData 
     int dx = heroes.data[index].x - enemyX;
     int dy = heroes.data[index].y - enemyY;
 
-    //Checking attack validity for the elf, the others have been checked.
+    // Checking attack validity for the elf, the others have been checked.
     int stepX = (dx < 0 ? 1 : -1), stepY = (dy < 0 ? 1 : -1);
     if(dx != 0){
         int newX = heroes.data[index].x + stepX;
-        while(newX != enemyX ){
+        while(newX != enemyX){
             if((*grid)[newX][enemyY] != '.') return 0;
             newX += stepX;
         }
@@ -214,25 +280,29 @@ int canAttack(char ***grid, int rows, int col, int enemyX, int enemyY, HeroData 
     return 1;
 }
 
-int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]){
-    int x, y;
+int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]){
+    int x, y, curr;
+    int heroIndex = getHeroIndex(*heroes, move[0]);
     char position[6];
+
     if(command == 'M'){
-        int curr = 2;
+        curr = 2;
         if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
         cdEnemy(grid, rows, col, enemies, dif, x, y, position);
     } else if(command == 'A'){
-        int curr = 4, heroIndex = getHeroIndex(*heroes, move[0]);
+        curr = 4;
         if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
         if(!validCell(*heroes, x, y, heroIndex)) return 0;
         if(!canAttack(grid, rows, col, x, y, *heroes, move, heroIndex)) return 0;
         int enemyIndex = getEnemyIndex(*enemies, x, y);
 
-        //Get damage and apply it to the enemy.
+        // Get damage and apply it to the enemy.
         printf("\nValid Attack at %s!\n\n", position);
         heroDamage(grid, x, y, heroes->data[heroIndex], enemies, enemyIndex, position);
     } else {
-        
+        if(!checkValidMoves(move, strlen(move) - 1, heroes->data[heroIndex])) return 0;
+        if(!applyMove(grid, rows, col, move, strlen(move) - 1, &heroes->data[heroIndex])) return 1;
+        printf("\nValid Move!\n\n"); system("PAUSE");
     }
     return 1;
 }

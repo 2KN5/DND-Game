@@ -14,10 +14,10 @@
 
 // Movement and input
 char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char move[]);
-int applyMove(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]);
+int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]);
 
 // String and position parsing
-int checkValidMoves(char moves[], int length);
+int checkValidMoves(char moves[], int length, Hero hero);
 int checkAttack(char attack[], int length);
 int isHero(char c, HeroData heroes);
 int checkValidLetters(char command[], int length, HeroData heroes);

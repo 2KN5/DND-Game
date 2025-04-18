@@ -11,17 +11,6 @@ int numberOfDig(int x){
     return c;
 }
 
-void returnColChar(int x, char str[]){
-    if(x < 26){
-        str[0] = 'A' + x;
-        str[1] = '\0';
-    } else if(x <= 100){
-        str[0] = 'A' + x / 26 - 1;
-        str[1] = 'A' + x % 26;
-        str[2] = '\0';
-    } 
-}
-
 void printColChar(int x, int width){
     if(x < 26){
         printf("%*c ", width, 'A' + x);

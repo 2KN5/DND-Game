@@ -40,7 +40,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
             continue;
         } else if(nextCommand == 1){
             return;
-        } else if(!applyMove(grid, rows, col, heroes, enemies, dif, result, move)){
+        } else if(!applyCommand(grid, rows, col, heroes, enemies, dif, result, move)){
             printGrid(grid, rows, col, *heroes, *enemies, dif);
             printf("\nInvalid Move!\n");
             continue;

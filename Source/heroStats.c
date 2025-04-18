@@ -15,7 +15,7 @@ void heroStats(HeroData *hero)
         } else if(hero->data[i].class == 'E'){
             hero->data[i].health = 6;
             hero->data[i].numberOfMoves = 12;
-        } else {
+        } else if(hero->data[i].class == 'D'){
             hero->data[i].health = 7;
             hero->data[i].numberOfMoves = 6;
         }

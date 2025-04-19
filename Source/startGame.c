@@ -2,14 +2,22 @@
 #include <stdlib.h>
 #include "startGame.h"
 
-int otherCommands(char c, char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char dif[]){
-    if(c == 'X') return 0; // Continue loop, let the enemy play
+int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, EnemyData enemies, char dif[]){
+    if(c == 'X'){
+        for(int i = 0; i < heroes->numberOfHeroes; ++i){
+            heroes->data[i].actions[0] = 1;
+            heroes->data[i].actions[1] = 1;
+        }
+        printf("\nPlayer turn over. Enemies are making their move...\n\n");
+        system("PAUSE");
+        return 0;
+    }
     if(c == 'Q'){
         char choice = 'N';
         while(1){
             printf("\nAre you sure you want to quit the game?\n(Y/N): ");
             if(!check(&choice)){
-                printGrid(grid, rows, col, heroes, enemies, dif);
+                printGrid(grid, rows, col, *heroes, enemies, dif);
                 printf("\nInvalid Choice!\n");
                 continue;
             }
@@ -33,7 +41,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
                 printf("\nInvalid Move!\n");
             }
         } while(result == 'I');
-        nextCommand = otherCommands(result, grid, rows, col, *heroes, *enemies, dif);
+        nextCommand = otherCommands(result, grid, rows, col, heroes, *enemies, dif);
         if(nextCommand == 0){
             //Let the enemy play
             printGrid(grid, rows, col, *heroes, *enemies, dif);

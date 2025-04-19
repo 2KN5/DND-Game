@@ -15,7 +15,7 @@
 #include "commonFunc.h"
 
 // For the other commands
-int otherCommands(char c, char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char dif[]);
+int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, EnemyData enemies, char dif[]);
 
 // Starting the game
 void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]);

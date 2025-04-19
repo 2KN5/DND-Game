@@ -12,6 +12,7 @@ typedef struct {
     int x, y;
     int health;
     int numberOfMoves;
+    int actions[2];
 } Hero;
 
 typedef struct {

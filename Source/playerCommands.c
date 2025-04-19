@@ -26,7 +26,11 @@ int checkValidMoves(char moves[], int length, Hero hero){
         }
         totalMoves += atoi(str);
     }
-    if(totalMoves > hero.numberOfMoves) return 0;
+    if(totalMoves > hero.numberOfMoves){
+        printf("\nMax number of moves for that hero is - %d\n\n", hero.numberOfMoves);
+        system("PAUSE");
+        return 0;
+    }
     return 1;
 }
 
@@ -39,58 +43,65 @@ void updatePositionChar(int x, int y, char pos[]){
 }
 
 int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *hero){
-    int currMove = 2, prevX = hero->x, prevY = hero->y;
-    char validMoves[] = "UDLR";
-
-    while(currMove <= length){
-        char str[3] = "\0", *ptr = strchr(validMoves, moves[currMove]);
-        int count = 0, nom, index = ptr - validMoves;
-
-        // Count number of steps.
-        ++currMove;
-        while(currMove <= length && isdigit(moves[currMove])){
-            str[count] = moves[currMove];
-            ++currMove; ++count;
-        }
-        nom = atoi(str); 
-        
-        // Checking direction.
-        int step, newLoc;
-        if(validMoves[index] == 'U' || validMoves[index] == 'D'){
-            step = (validMoves[index] == 'D' ? 1 : -1), newLoc = hero->x + (step * nom);
-            if(newLoc <= 0 || newLoc >= rows - 1){
-                printf("\nCan't go outside the map!\n\n");
-                system("PAUSE");
-                return 0;
+    if(hero->actions[1]){
+        int currMove = 2, prevX = hero->x, prevY = hero->y;
+        char validMoves[] = "UDLR";
+    
+        while(currMove <= length){
+            char str[3] = "\0", *ptr = strchr(validMoves, moves[currMove]);
+            int count = 0, nom, index = ptr - validMoves;
+    
+            // Count number of steps.
+            ++currMove;
+            while(currMove <= length && isdigit(moves[currMove])){
+                str[count] = moves[currMove];
+                ++currMove; ++count;
             }
-            for(int i = hero->x + step; i != newLoc + step; i += step){
-                if((*grid)[i][hero->y] != '.'){
-                    printf("\nObstacle encountered!\n\n");
+            nom = atoi(str); 
+            
+            // Checking direction.
+            int step, newLoc;
+            if(validMoves[index] == 'U' || validMoves[index] == 'D'){
+                step = (validMoves[index] == 'D' ? 1 : -1), newLoc = hero->x + (step * nom);
+                if(newLoc <= 0 || newLoc >= rows - 1){
+                    printf("\nCan't go outside the map!\n\n");
                     system("PAUSE");
                     return 0;
                 }
-            }
-            hero->x = newLoc;
-        } else {
-            step = (validMoves[index] == 'R' ? 1 : -1), newLoc = hero->y + (step * nom);
-            if(newLoc <= 0 || newLoc >= col - 1){
-                printf("\nCan't go outside the map!\n\n");
-                system("PAUSE");
-                return 0;
-            }
-            for(int j = hero->y + step; j != newLoc + step; j += step){
-                if((*grid)[hero->x][j] != '.'){
-                    printf("\nObstacle encountered!\n\n");
+                for(int i = hero->x + step; i != newLoc + step; i += step){
+                    if((*grid)[i][hero->y] != '.'){
+                        printf("\nObstacle encountered!\n\n");
+                        system("PAUSE");
+                        return 0;
+                    }
+                }
+                hero->x = newLoc;
+            } else {
+                step = (validMoves[index] == 'R' ? 1 : -1), newLoc = hero->y + (step * nom);
+                if(newLoc <= 0 || newLoc >= col - 1){
+                    printf("\nCan't go outside the map!\n\n");
                     system("PAUSE");
                     return 0;
                 }
+                for(int j = hero->y + step; j != newLoc + step; j += step){
+                    if((*grid)[hero->x][j] != '.'){
+                        printf("\nObstacle encountered!\n\n");
+                        system("PAUSE");
+                        return 0;
+                    }
+                }
+                hero->y = newLoc;
             }
-            hero->y = newLoc;
+            (*grid)[prevX][prevY] = '.';
+            prevX = hero->x; prevY = hero->y;
+            (*grid)[hero->x][hero->y] = hero->class;
+            updatePositionChar(hero->x + 1, hero->y, hero->positionChar);
         }
-        (*grid)[prevX][prevY] = '.';
-        prevX = hero->x; prevY = hero->y;
-        (*grid)[hero->x][hero->y] = hero->class;
-        updatePositionChar(hero->x + 1, hero->y, hero->positionChar);
+        hero->actions[1] = 0;
+    } else {
+        printf("\nYou have already moved this hero!\n\n");
+        system("PAUSE");
+        return 0;
     }
     return 1;
 }
@@ -298,7 +309,7 @@ int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *e
 
         // Get damage and apply it to the enemy.
         printf("\nValid Attack at %s!\n\n", position);
-        heroDamage(grid, x, y, heroes->data[heroIndex], enemies, enemyIndex, position);
+        heroDamage(grid, x, y, &heroes->data[heroIndex], enemies, enemyIndex, position);
     } else {
         if(!checkValidMoves(move, strlen(move) - 1, heroes->data[heroIndex])) return 0;
         if(!applyMove(grid, rows, col, move, strlen(move) - 1, &heroes->data[heroIndex])) return 1;

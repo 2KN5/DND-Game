@@ -19,5 +19,7 @@ void heroStats(HeroData *hero)
             hero->data[i].health = 7;
             hero->data[i].numberOfMoves = 6;
         }
+        hero->data[i].actions[0] = 1;
+        hero->data[i].actions[1] = 1;
     }
 }

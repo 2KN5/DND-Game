@@ -44,7 +44,7 @@ void updatePositionChar(int x, int y, char pos[]){
 
 int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *hero){
     if(hero->actions[1]){
-        int currMove = 2, prevX = hero->x, prevY = hero->y;
+        int currMove = 2, prevX = hero->x, prevY = hero->y, numberOfActions = 0;
         char validMoves[] = "UDLR";
     
         while(currMove <= length){
@@ -72,9 +72,11 @@ int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *h
                     if((*grid)[i][hero->y] != '.'){
                         printf("\nObstacle encountered!\n\n");
                         system("PAUSE");
+                        if(numberOfActions) hero->actions[1] = 0;
                         return 0;
                     }
                 }
+                ++numberOfActions;
                 hero->x = newLoc;
             } else {
                 step = (validMoves[index] == 'R' ? 1 : -1), newLoc = hero->y + (step * nom);
@@ -87,9 +89,11 @@ int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *h
                     if((*grid)[hero->x][j] != '.'){
                         printf("\nObstacle encountered!\n\n");
                         system("PAUSE");
+                        if(numberOfActions) hero->actions[1] = 0;
                         return 0;
                     }
                 }
+                ++numberOfActions;
                 hero->y = newLoc;
             }
             (*grid)[prevX][prevY] = '.';
@@ -149,7 +153,7 @@ void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], in
                 return;
             }
         }
-        printf("\nYou can only Create/Destroy enemies on floor tiles (.) !\n\n"); 
+        printf("\nYou can only Create/Destroy enemies!\n\n"); 
         system("PAUSE");
         return;
     }
@@ -272,7 +276,7 @@ int canAttack(char ***grid, int rows, int col, int enemyX, int enemyY, HeroData 
     int dx = heroes.data[index].x - enemyX;
     int dy = heroes.data[index].y - enemyY;
 
-    // Checking attack validity for the elf, the others have been checked.
+    // Checking attack validity for the elf, the others have been checked in validCell().
     int stepX = (dx < 0 ? 1 : -1), stepY = (dy < 0 ? 1 : -1);
     if(dx != 0){
         int newX = heroes.data[index].x + stepX;

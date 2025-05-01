@@ -20,6 +20,7 @@ typedef struct {
 
 // Grid creation and initialization
 void readMS(int *rows, int *col);
+void createSG(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]);
 void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]);
 void clear_Rooms_Hallway(char ***grid, int rows, int col);
 
@@ -41,7 +42,7 @@ void spawnEnemies(char ***grid, int rows, int col, HeroData *hero, EnemyData *en
 void populateRooms(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, int **roomMap, int numberOfRooms, char dif[]);
 
 // Grid display and memory
-void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, char dif[]);
+void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, char dif[], int level);
 void freeGrid(char ***grid, int rows);
 
 // Column label utilities

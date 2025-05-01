@@ -6,7 +6,7 @@ int main(void){
 
     srand(time(NULL));
 
-    int rows, col, exitGame = 0;
+    int rows, col, exitGame = 0, level = 1;
     char **grid, dif[10], pos[6];
 
     HeroData heroes;
@@ -23,10 +23,10 @@ int main(void){
     
     //Generate the map.
     printf("Creating map...\n");
-    createGrid(&grid, rows, col, &heroes, &enemies, dif);
+    createSG(&grid, rows, col, &heroes, &enemies, dif);
     
     //Welcome to the dungeon!
-    startGame(&grid, rows, col, &heroes, &enemies, dif);
+    startGame(&grid, rows, col, &heroes, &enemies, dif, level);
     
     //Free the grid.
     free(enemies.data);

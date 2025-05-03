@@ -23,7 +23,7 @@ int isHero(char c, HeroData heroes);
 int checkValidLetters(char command[], int length, HeroData heroes);
 int checkString(char str[], int length, HeroData heroes);
 int returnColNumber(char letters[]);
-int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[]);
+int getCoords(char str[], int index, int rows, int col, int *x, int *y, char pos[]);
 
 // Enemy and hero mechanics
 void shiftEnemies(EnemyData *enemies, int index);

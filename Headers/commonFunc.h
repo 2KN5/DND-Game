@@ -23,6 +23,13 @@ static inline void shiftEnemies(EnemyData *enemies, int index){
     --(enemies->totalEnemies);
 }
 
+static inline void shiftHeroes(HeroData *heroes, int index){
+    for(int i = index; i < heroes->numberOfHeroes - 1; ++i){
+        heroes->data[i] = heroes->data[i + 1];
+    }
+    --(heroes->numberOfHeroes);
+}
+
 static inline int check(char *choice){
     char buffer[100];
     fgets(buffer, sizeof(buffer), stdin);

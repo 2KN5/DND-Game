@@ -210,7 +210,7 @@ int getHeroIndex(HeroData heroes, char hero){
     return index;
 }
 
-int getCords(char str[], int index, int rows, int col, int *x, int *y, char pos[]){
+int getCoords(char str[], int index, int rows, int col, int *x, int *y, char pos[]){
     char letters[3] = "", numbers[3] = "";
     int length = strlen(str) - 1, saveIndex = index - 1;
 
@@ -302,11 +302,11 @@ int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *e
 
     if(command == 'M'){
         curr = 2;
-        if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
+        if(!getCoords(move, curr, rows, col, &x, &y, position)) return 0;
         cdEnemy(grid, rows, col, enemies, dif, x, y, position);
     } else if(command == 'A'){
         curr = 4;
-        if(!getCords(move, curr, rows, col, &x, &y, position)) return 0;
+        if(!getCoords(move, curr, rows, col, &x, &y, position)) return 0;
         if(!validCell(*heroes, x, y, heroIndex)) return 0;
         if(!canAttack(grid, rows, col, x, y, *heroes, move, heroIndex)) return 0;
         int enemyIndex = getEnemyIndex(*enemies, x, y);

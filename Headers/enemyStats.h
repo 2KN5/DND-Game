@@ -8,7 +8,6 @@ typedef struct {
     int numberOfMoves;
     int health;
     int x, y;
-    int isAlive;
 } Enemy;
 
 typedef struct {

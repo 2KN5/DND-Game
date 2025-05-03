@@ -17,7 +17,6 @@ void spawnSingleEnemy(EnemyData *enemy, char dif[], int x, int y){
     enemy->data[index].health = rand() % (upperBound - lowerBound + 1) + lowerBound;
     enemy->data[index].numberOfMoves = 10;
     enemy->data[index].x = x; enemy->data[index].y = y; 
-    enemy->data[index].isAlive = 1;
     ++(enemy->totalEnemies);
 }
 
@@ -37,6 +36,5 @@ void enemyStats(EnemyData *enemy, char dif[]){
         int index = enemy->totalEnemies + i;
         enemy->data[index].health = rand() % (upperBound - lowerBound + 1) + lowerBound;
         enemy->data[index].numberOfMoves = 10;
-        enemy->data[index].isAlive = 1;
     }
 }

@@ -8,7 +8,7 @@
 #include "commonFunc.h"
 
 // Enemy actions
-void enemyDamage(Hero hero, Enemy enemy);
+void enemyDamage(char ***grid, int x, int y, HeroData *heroes, int index);
 int enemyDefence(Enemy enemy);
 
 #endif

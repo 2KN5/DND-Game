@@ -43,7 +43,7 @@ int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, Ene
     return 2;
 }
 
-void printDistance(char **grid, int rows, int col, HeroData heroes, EnemyData enemies){
+void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enemies){
     int maxEnemies = enemies.totalEnemies;
     int canSee[maxEnemies][2], count = 0;
     char whichHero[maxEnemies];
@@ -51,8 +51,8 @@ void printDistance(char **grid, int rows, int col, HeroData heroes, EnemyData en
     // Finding the number of enemies with a character in their range.
     for(int i = 0; i < maxEnemies; ++i){
         int distance = 6, index = 0;
-        for(int j = 0; j < heroes.numberOfHeroes; ++j){
-            int dx = abs(heroes.data[j].x - enemies.data[i].x), dy = abs(heroes.data[j].y - enemies.data[i].y);
+        for(int j = 0; j < heroes->numberOfHeroes; ++j){
+            int dx = abs(heroes->data[j].x - enemies.data[i].x), dy = abs(heroes->data[j].y - enemies.data[i].y);
             if(dx + dy < distance){
                 distance = dx + dy;
                 index = j;
@@ -63,20 +63,29 @@ void printDistance(char **grid, int rows, int col, HeroData heroes, EnemyData en
         if(distance <= 5){
             canSee[count][0] = enemies.data[i].x;
             canSee[count][1] = enemies.data[i].y;
-            whichHero[count] = heroes.data[index].class;
+            whichHero[count] = heroes->data[index].class;
             ++count;
         }
     }
 
-    // Orfea edo kane to attack, apla na checkarei an einai adjacent dhladh x - 1, x + 1, ...
-    // mporeis apla na xrhsimopoihseis to manhattan distance dhladh apla auto -> int dx = abs(heroes.data[j].x - enemies.data[i].x) kai meta gia to y
-    // kai gia na einai apo dipla to athroisma tous dx + dy == 1
-    // meta an einai kanto oste na aferei hp apo ton hroa pou einai dipla tou me to function sto enemyMove.c
-    // apla na xereis an to trexeis den tha allaxoun ta kanonika values sto main programma(einai apla test function gia tora), ara an thes na deis an douleuei tote
-    // prepei na kaneis print mhnumata MESA SE AUTO TO FUNCTION
-    // oraia tora stamata na tros burger
     for(int i = 0; i < count; ++i){
-        printf("%c - Distance: X: %d / Y: %d\n", whichHero[i], canSee[i][0] + 1, canSee[i][1]);
+        int index;
+        for(int j = 0; j < heroes->numberOfHeroes; ++j){
+            if(heroes->data[j].class == whichHero[i]){
+                index = j;
+            }
+        }
+        int heroX = heroes->data[index].x, heroY = heroes->data[index].y;
+        int enemyX = canSee[i][0], enemyY = canSee[i][1];
+        int dx = abs(heroX - enemyX), dy = abs(heroY - enemyY);
+        printf("Manhattan Distance: (%d, %d)\n", dx, dy);
+        if(dx + dy == 1){
+            printf("In range!\n");
+            enemyDamage(grid, heroX, heroY, heroes, index);
+        } else {
+            printf("Enemy at (%d, %c) is targetting (%c) with %d Health!\n", enemyX + 1, enemyY + 65, whichHero[i], heroes->data[index].health);
+            printf("Not in range, time to move!\n");
+        }
     }
     system("PAUSE");
 }
@@ -98,7 +107,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
             nextCommand = otherCommands(result, grid, rows, col, heroes, *enemies, dif, level);
             if(nextCommand == 0){
                 // Let the enemy play
-                printDistance(*grid, rows, col, *heroes, *enemies);
+                enemyTurn(grid, rows, col, heroes, *enemies);
                 printGrid(grid, rows, col, *heroes, *enemies, dif, level);
                 continue;
             } else if(nextCommand == 1){

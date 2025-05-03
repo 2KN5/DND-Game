@@ -26,6 +26,8 @@ int returnColNumber(char letters[]);
 int getCoords(char str[], int index, int rows, int col, int *x, int *y, char pos[]);
 
 // Enemy and hero mechanics
+int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, EnemyData enemies, char dif[], int level);
+void playerActions(HeroData *heroes);
 void shiftEnemies(EnemyData *enemies, int index);
 void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], int x, int y, char pos[]);
 int validCell(HeroData heroes, int x, int y, int index);

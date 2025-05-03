@@ -11,6 +11,7 @@
 #include "enemyStats.h"
 #include "heroStats.h"
 #include "playerCommands.h"
+#include "enemyTurn.h"
 #include "mainMenu.h"
 #include "commonFunc.h"
 

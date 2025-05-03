@@ -2,6 +2,47 @@
 #include <stdlib.h>
 #include "playerCommands.h"
 
+int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, EnemyData enemies, char dif[], int level){
+    if(c == 'X'){
+        for(int i = 0; i < heroes->numberOfHeroes; ++i){
+            heroes->data[i].actions[0] = 1;
+            heroes->data[i].actions[1] = 1;
+        }
+        printf("\nTurn ended! Let's see what the enemies are up to...\n\n");
+        system("PAUSE");
+        return 0;
+    }
+    if(c == 'Q'){
+        char choice = 'N';
+        while(1){
+            printf("\nAre you sure you want to quit the game?\n(Y/N): ");
+            if(!check(&choice)){
+                printGrid(grid, rows, col, *heroes, enemies, dif, level);
+                printf("\nInvalid Choice!\n");
+                continue;
+            }
+            break;
+        } 
+        return (choice == 'N' ? 0 : 1);
+    }
+    return 2;
+}
+
+void playerActions(HeroData *heroes){
+    int total = 0;
+    for(int i = 0; i < heroes->numberOfHeroes; ++i){
+        total += heroes->data[i].actions[0] + heroes->data[i].actions[1];
+    }
+    if(total == 0){
+        for(int i = 0; i < heroes->numberOfHeroes; ++i){
+            heroes->data[i].actions[0] = 1;
+            heroes->data[i].actions[1] = 1;
+        }
+        printf("\nAll heroes have used their actions! Enemy turn begins...\n\n");
+        system("PAUSE");
+    }
+}
+
 int checkAttack(char attack[], int length){
     int curr = 3;
     if(attack[curr] == '*' && attack[curr - 1] != 'A') return 0;

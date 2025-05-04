@@ -6,6 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include "grid.h"
 #include "heroStats.h"
 #include "enemyStats.h"
 #include "heroMove.h"

@@ -23,7 +23,7 @@ int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, Ene
             }
             break;
         } 
-        return (choice == 'N' ? 0 : 1);
+        return (choice == 'N' ? -1 : 1);
     }
     return 2;
 }

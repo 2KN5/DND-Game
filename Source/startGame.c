@@ -8,7 +8,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
     printGrid(grid, rows, col, *heroes, *enemies, dif, level);
     printf("\nWelcome to the dungeon Player!\nAre you ready for the adventure?\n");
     while(1){
-        while(enemies->totalEnemies > 0){
+        while(enemies->totalEnemies > 0 && heroes->numberOfHeroes > 0){
             do{
                 result = checkMove(grid, rows, col, *heroes, *enemies, move);
                 if(result == 'I'){
@@ -32,7 +32,10 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
             playerActions(heroes);
             printGrid(grid, rows, col, *heroes, *enemies, dif, level);
         }
-
+        if(heroes->numberOfHeroes <= 0){
+            printf("All heroes have perished. Good luck next time.\n");
+            return;
+        }
         // Update the level, free the grid, and create a new one.
         ++level;
         printf("\nLevel Cleared! Moving to the next one...\n\n");

@@ -5,7 +5,7 @@
 int isValidTile(char **grid, int rows, int col, int x, int y, int visited[rows][col]){
     return (((x >= 1 && x < rows - 1) && (y >= 1 && y < col - 1) &&
             (grid[x][y] == '.' || isalpha(grid[x][y])) && 
-            visited[x][y] == 1) ? 1 : 0);
+            visited[x][y] == 0) ? 1 : 0);
 }
 
 int findPath(char **grid, int rows, int col, int enemyX, int enemyY, int heroX, int heroY, int *pathLength, Point path[]){
@@ -47,17 +47,35 @@ int findPath(char **grid, int rows, int col, int enemyX, int enemyY, int heroX, 
         ++front;
     }
     if(!visited[heroX][heroY]){
-        printf("No path found!\n");
+        *pathLength = 0;
         return 0;
     }
-    for(int i = heroX; i <= 0; --i){
-        
+
+    // Backtracking, find the path.
+    Point current;
+    current.x = heroX;
+    current.y = heroY;
+    int count = 0;
+    while(current.x != enemyX || current.y != enemyY){
+        path[count] = current;
+        current = parent[current.x][current.y];
+        ++count;
     }
+    path[count] = (Point){enemyX, enemyY};
+    ++count;
+    Point temp;
+    for(int i = 0; i < count / 2; ++i){
+        temp = path[i];
+        path[i] = path[count - 1 - i];
+        path[count - 1 - i] = temp;
+    }
+    *pathLength = count - 1;
+    return 1;
 }
 
 void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enemies){
     int maxEnemies = enemies.totalEnemies;
-    int canSee[maxEnemies][2], count = 0;
+    int canSee[maxEnemies][3], count = 0;
     char whichHero[maxEnemies];
 
     // Finding the number of enemies with a character in their range.
@@ -75,6 +93,7 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
         if(distance <= 5){
             canSee[count][0] = enemies.data[i].x;
             canSee[count][1] = enemies.data[i].y;
+            canSee[count][2] = index;
             whichHero[count] = heroes->data[index].class;
             ++count;
         }
@@ -91,12 +110,20 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
         int enemyX = canSee[i][0], enemyY = canSee[i][1];
         int dx = abs(heroX - enemyX), dy = abs(heroY - enemyY);
         if(dx + dy == 1){
-            printf("In range!\n");
             enemyDamage(grid, heroX, heroY, heroes, index);
         } else {
-            printf("Enemy at (%d, %c) is targetting (%c) with %d Health!\n", enemyX + 1, enemyY + 65, whichHero[i], heroes->data[index].health);
-            printf("Not in range, time to move!\n");
+            int pathLen;
+            Point path[rows * col];
+            if(findPath(*grid, rows, col, enemyX, enemyY, heroX, heroY, &pathLen, path)){
+                for(int j = 0; j < maxEnemies; ++j){
+                    if(enemies.data[j].x == canSee[i][0] && enemies.data[j].y == canSee[i][1]){
+                        (*grid)[enemies.data[j].x][enemies.data[j].y] = '.';
+                        enemies.data[j].x = path[pathLen - 1].x;
+                        enemies.data[j].y = path[pathLen - 1].y;
+                        (*grid)[enemies.data[j].x][enemies.data[j].y] = '0' + enemies.data[j].health;
+                    }
+                }
+            }
         }
     }
-    system("PAUSE");
 }

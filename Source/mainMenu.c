@@ -16,75 +16,27 @@ int validString(char c[]){
     }
 }
 
-void clearHero(HeroData *heroes){
-    for(int i = 0; i < MAX_PARTY_SIZE; ++i){
-        heroes->data[i].class = ' ';
-    }
-    heroes->numberOfHeroes = 0;
-}
-
-void printChoices(HeroData *heroes, char str[], char *first, int noh){
-    char second;
-    while(1){
-
-        //Always re-display settings.
-        clearScreen();
-        printf("GAME SETTINGS\n\n");
-        printf("DIFFICULTY: %s\nYOUR PARTY INVOLVES: ", str);
-        for(int i = 0; i < noh; ++i){
-            printf("%c ", heroes->data[i].class);
-        }
-
-        //First question: ...
-        printf("\n\nAre you ready to begin? (Y/N): ");
-        if(!check(first)) continue;
-        clearScreen();
-        if(*first == 'Y'){
-            return; // Exit to starting menu.
-        }
-
-        //Second question: ...
-        while(1){
-            printf("Would you like to change your choices? (Y/N): ");
-            if(!check(&second)){
-                clearScreen();
-                printf("Invalid Statement!\n\n");
-                continue;
-            }
-            break;
-        }
-        if(second == 'Y'){ //Exit to the starting menu.
-            clearHero(heroes);
-            return;
-        } 
-    }
-}
-
 void menu(HeroData *hero, char dif[], int *exitGame){
 
     int n;
     char choice;
     clearScreen();
-    printf("Welcome to the game!\n\n");
 
-    //Keep asking the user, until they decide on their choices.
+    // Keep asking the user, until they decide on their choices.
     while(1){
 
-        //Assemble the party.
-        char buffer[100] = {' '}, msg[100] = {"You may assemble a party of up to %d unique heroes.\n\n"};
+        // Assemble the party.
+        char buffer[100] = {' '};
         while(buffer[0] != '\n'){
-            printf(msg, MAX_PARTY_SIZE);
-            printf("Enter number of heroes (1-%d) or (5) to Exit: ", MAX_PARTY_SIZE);
+            printNOH();
+            printf("Enter the number of heroes you wish to recruit (1-%d), or (5) to Exit:\n>  ", MAX_PARTY_SIZE);
             while(scanf("%d", &n) != 1 || n <= 0 || n > MAX_PARTY_SIZE + 1){
                 clearScreen();
-                printf("Wrong input! You may assemble a party of up to %d unique heroes.\n\n", MAX_PARTY_SIZE);
-                printf("Enter number of heroes (1-%d) or (5) to Exit: ", MAX_PARTY_SIZE);
+                printInvalidNOH();
+                printf("Please enter a number between 1 and 4, or (5) to Exit:\n> ");
                 clearBuffer();
             }
             fgets(buffer, sizeof(buffer), stdin);
-
-            //Change the message after entering the first invalid value.
-            if(buffer[0] != '\n') strcpy(msg, "Wrong input! You may assemble a party of up to %d unique heroes.\n\n");
             clearScreen();
         }
         if(n == 5){
@@ -92,22 +44,20 @@ void menu(HeroData *hero, char dif[], int *exitGame){
             *exitGame = 1;
             return;
         }
-        printf("Perfect! You chose %d heroes!\n\n", n);
+        printf("\nPerfect! You chose %d heroes!\n", n);
         if(n != MAX_PARTY_SIZE){
 
-            //Choose class for each hero.
+            // Choose class for each hero.
             int partySize = 0;
             while(partySize < n){
                 
-                //Menu
+                // Menu.
                 char chooseClass[3]; 
-                printf("Heroes left: %d\n\n", n - partySize);
-                printf("(B) Barbarian, (D) Dwarf, (E) Elf, (W) Wizard.\n");
-                printf("Select a hero type -> ( B / D / E / W): ");
+                printChooseHeroes(n - partySize);
                 fgets(chooseClass, sizeof(chooseClass), stdin);
                 clearScreen();
 
-                //Checking if user entered > 1 characters.
+                // Checking if user entered > 1 characters.
                 if(chooseClass[strlen(chooseClass) - 1] != '\n'){
                     printf("You can only input a character!\n\n");
                     clearBuffer();
@@ -116,10 +66,10 @@ void menu(HeroData *hero, char dif[], int *exitGame){
                     chooseClass[strlen(chooseClass) - 1] = '\0';
                 }
         
-                //Check for duplicates and valid choices.
+                // Check for duplicates and valid choices.
                 upperString(chooseClass);
                 if(strcmp(chooseClass, "B") != 0 && strcmp(chooseClass, "D") != 0 && strcmp(chooseClass, "E") != 0 && strcmp(chooseClass, "W") != 0){
-                    printf("Invalid Choice!\n\n");
+                    printf("\nInvalid Choice!\n");
                     continue;
                 }
                 int dup = 0;
@@ -130,7 +80,7 @@ void menu(HeroData *hero, char dif[], int *exitGame){
                     }
                 }
                 if(dup){
-                    printf("You've already selected a (%c) hero! Choose a different class.\n\n", chooseClass[0]);
+                    printf("\nYou've already selected a (%c) hero! Choose a different class.\n", chooseClass[0]);
                 } else {
                     hero->data[partySize].class = chooseClass[0];
                     ++(partySize);
@@ -138,7 +88,7 @@ void menu(HeroData *hero, char dif[], int *exitGame){
             }
             hero->numberOfHeroes = partySize;
         } else {
-            //If player selected 4, initiate their values.
+            // If player selected 4, initiate their values.
             hero->data[0].class = 'B';
             hero->data[1].class = 'W';
             hero->data[2].class = 'E';
@@ -146,23 +96,23 @@ void menu(HeroData *hero, char dif[], int *exitGame){
             hero->numberOfHeroes = 4;
         }
         
-        //Set difficulty.
-        printf("Choose the difficulty -> (Easy, Medium, Hard): ");
+        // Set difficulty.
         while(1){
+            printDifficulty();
             fgets(dif, 10, stdin);
             clearScreen();
 
-            //Check if value entered has a valid length.
+            // Check if value entered has a valid length.
             if(dif[strlen(dif) - 1] != '\n'){
                 clearBuffer();
             } else {
                 dif[strlen(dif) - 1] = '\0';
             }
 
-            //Convert to upper and compare.
+            // Convert to upper and compare.
             upperString(dif);
             if(strcmp(dif, "EASY") != 0 && strcmp(dif, "MEDIUM") != 0 && strcmp(dif, "HARD") != 0){
-                printf("Choose a valid difficulty -> (Easy, Medium, Hard): ");
+                printf("\nEnter a valid difficulty! -> (Easy, Medium, Hard)\n");
                 continue;
             }
             break;

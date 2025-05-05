@@ -6,10 +6,10 @@
 #include "heroStats.h"
 #include "enemyStats.h"
 #include "commonFunc.h"
+#include "printStatements.h"
 
-// Input validation and cleanup
+// Input validation
 int validString(char c[]);
-void clearHero(HeroData *heroes);
 
 // Menu display and hero selection
 void printChoices(HeroData *hero, char str[], char *first, int noh);

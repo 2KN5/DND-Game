@@ -27,22 +27,6 @@ void getPositionChar(int x, int y, char pos[]){
     strcat(pos, numbers);
 }
 
-void readMS(int *rows, int *col){
-    char buffer[100] = {' '};
-    while(buffer[0] != '\n'){
-        clearScreen();
-        printf("MAP RESTRICTIONS -> Has to be at least 10x10, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");
-        printf("Enter map size(N x M): ");
-        while(scanf("%d%d", rows, col) != 2 || *rows < 10 || *col < 10 || *col > 92){
-            clearScreen();
-            printf("MAP RESTRICTIONS -> Has to be at least 10x10, and the Column Size(M), can be MAX = 92 (Fullscreen can't fit more squares.)\n\n");
-            printf("Enter map size(N x M): ");
-            clearBuffer();
-        }
-        fgets(buffer, sizeof(buffer), stdin);
-    } 
-}
-
 void genFurniture(char ***grid, int rows, int col){
     int area = rows * col;
     int lowerBound = (col >= 50 || rows >= 50 ? area * 0.01 : 1), upperBound = (col >= 50 || rows >= 50 ? area * 0.03 : (int)fmax(1.0, area * 0.02));
@@ -317,7 +301,7 @@ void createSG(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy,
     countRooms(*grid, rows, col, &roomMap, &count);
     populateRooms(grid, rows, col, hero, enemy, roomMap, count, dif); // Generate at least 1 furniture per room.
     genFurniture(grid, rows, col); // Generate a couple more furniture.
-    spawnHeroes(grid, rows, col, hero); //Place heroes and enemies
+    spawnHeroes(grid, rows, col, hero); // Place heroes and enemies
     
     // Free roomMap grid, can't use freeGrid, char not int
     for(int i = 0; i < rows; ++i){
@@ -363,7 +347,7 @@ void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enem
     populateRooms(grid, rows, col, hero, enemy, roomMap, count, dif); // Generate at least 1 furniture per room.
     genFurniture(grid, rows, col); // Generate a couple more furniture.
     clear_Rooms_Hallway(grid, rows, col);
-    spawnHeroes(grid, rows, col, hero); //Place heroes and enemies
+    spawnHeroes(grid, rows, col, hero); // Place heroes and enemies
     
     // Free roomMap grid, can't use freeGrid, char not int
     for(int i = 0; i < rows; ++i){
@@ -381,7 +365,11 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
 
     // Printing the grid.
     clearScreen();
+    printf("\n==================================================\n");
+    printf("                  DUNGEON ADVENTURE               \n");
+    printf("==================================================\n\n");
     printf("-DIFFICULTY: %s\n-LEVEL: %d\n\n", dif, level);
+    printf("--------------------------------------------------\n\n");
     printf("%*c", width + 1, ' ');
     for(int i = 0; i < col; ++i){
         printColChar(i, 2);
@@ -422,8 +410,12 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
         }
         printf("\n");
     }
-    printf("\nTotal Enemies: %d\n\n", enemy.totalEnemies);
+    printf("\n--------------------------------------------------\n\n");
+    printf("Total Enemies: %d\n", enemy.totalEnemies);
+    printf("\n--------------------------------------------------\n\n");
+    printf("Hero Positions and Health:\n\n");
     for(int i = 0; i < hero.numberOfHeroes; ++i){
-        printf("%c: %d, at %s\n", hero.data[i].class, hero.data[i].health, hero.data[i].positionChar);
+        printf(" > %c: %d, at %s\n", hero.data[i].class, hero.data[i].health, hero.data[i].positionChar);
     }
+    printf("\n--------------------------------------------------\n");
 }

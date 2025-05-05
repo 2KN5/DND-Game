@@ -6,7 +6,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
     int nextCommand;
     char result, move[28];
     printGrid(grid, rows, col, *heroes, *enemies, dif, level);
-    printf("\nWelcome to the dungeon Player!\nAre you ready for the adventure?\n");
+    welcome();
     while(1){
         while(enemies->totalEnemies > 0 && heroes->numberOfHeroes > 0){
             do{

@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "enemyStats.h"
+#include "heroStats.h"
 
 static inline void pause(){
     int c;
@@ -66,6 +68,5 @@ static inline void clearScreen(){
         system("clear");
     #endif
 }
-
 
 #endif

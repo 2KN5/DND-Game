@@ -20,8 +20,6 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
             if(nextCommand == 0){
                 // Let the enemy play
                 enemyTurn(grid, rows, col, heroes, *enemies);
-                printGrid(grid, rows, col, *heroes, *enemies, dif, level);
-                continue;
             } else if(nextCommand == 1){
                 return;
             } else if(!applyCommand(grid, rows, col, heroes, enemies, dif, result, move)){

@@ -9,7 +9,7 @@ int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, Ene
             heroes->data[i].actions[1] = 1;
         }
         printf("\nTurn ended! Let's see what the enemies are up to...\n\n");
-        system("PAUSE");
+        pause();
         return 0;
     }
     if(c == 'Q'){
@@ -39,8 +39,9 @@ void playerActions(HeroData *heroes){
             heroes->data[i].actions[1] = 1;
         }
         printf("\nAll heroes have used their actions! Enemy turn begins...\n\n");
-        system("PAUSE");
+        pause();
     }
+    // return int and call enemy turn in startGame
 }
 
 int checkAttack(char attack[], int length){
@@ -69,7 +70,7 @@ int checkValidMoves(char moves[], int length, Hero hero){
     }
     if(totalMoves > hero.numberOfMoves){
         printf("\nMax number of moves for that hero is - %d\n\n", hero.numberOfMoves);
-        system("PAUSE");
+        pause();
         return 0;
     }
     return 1;
@@ -106,13 +107,14 @@ int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *h
                 step = (validMoves[index] == 'D' ? 1 : -1), newLoc = hero->x + (step * nom);
                 if(newLoc <= 0 || newLoc >= rows - 1){
                     printf("\nCan't go outside the map!\n\n");
-                    system("PAUSE");
+                    if(numberOfActions > 0) hero->actions[1] = 0;
+                    pause();
                     return 0;
                 }
                 for(int i = hero->x + step; i != newLoc + step; i += step){
                     if((*grid)[i][hero->y] != '.'){
                         printf("\nObstacle encountered!\n\n");
-                        system("PAUSE");
+                        pause();
                         if(numberOfActions) hero->actions[1] = 0;
                         return 0;
                     }
@@ -123,13 +125,14 @@ int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *h
                 step = (validMoves[index] == 'R' ? 1 : -1), newLoc = hero->y + (step * nom);
                 if(newLoc <= 0 || newLoc >= col - 1){
                     printf("\nCan't go outside the map!\n\n");
-                    system("PAUSE");
+                    if(numberOfActions > 0) hero->actions[1] = 0;
+                    pause();
                     return 0;
                 }
                 for(int j = hero->y + step; j != newLoc + step; j += step){
                     if((*grid)[hero->x][j] != '.'){
                         printf("\nObstacle encountered!\n\n");
-                        system("PAUSE");
+                        pause();
                         if(numberOfActions) hero->actions[1] = 0;
                         return 0;
                     }
@@ -145,7 +148,7 @@ int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *h
         hero->actions[1] = 0;
     } else {
         printf("\nYou have already moved this hero!\n\n");
-        system("PAUSE");
+        pause();
         return 0;
     }
     return 1;
@@ -183,19 +186,19 @@ void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], in
         spawnSingleEnemy(enemies, dif, x, y);
         (*grid)[x][y] = '0' + enemies->data[enemies->totalEnemies - 1].health;
         printf("\nSpawning enemy at position: %s\n\n", pos);
-        system("PAUSE");
+        pause();
     } else {
         for(int i = 0; i < enemies->totalEnemies; ++i){
             if(enemies->data[i].x == x && enemies->data[i].y == y){
                 (*grid)[x][y] = '.';
                 shiftEnemies(enemies, i);
                 printf("\nEliminating enemy at position: %s\n\n", pos);
-                system("PAUSE");
+                pause();
                 return;
             }
         }
         printf("\nYou can only Create/Destroy enemies!\n\n"); 
-        system("PAUSE");
+        pause();
         return;
     }
 }
@@ -305,12 +308,12 @@ int validCell(HeroData heroes, int x, int y, int index){
 int canAttack(char ***grid, int rows, int col, int enemyX, int enemyY, HeroData heroes, char move[], int index){
     if(isalpha((*grid)[enemyX][enemyY])){
         printf("\nYou can't attack your allies!\n\n");
-        system("PAUSE");
+        pause();
         return 0;
     }
     if(!isdigit((*grid)[enemyX][enemyY])){
         printf("\nThat's not an enemy!\n\n");
-        system("PAUSE");
+        pause();
         return 0;
     }
     if(heroes.data[index].class == 'W') return 1;
@@ -358,7 +361,8 @@ int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *e
     } else {
         if(!checkValidMoves(move, strlen(move) - 1, heroes->data[heroIndex])) return 0;
         if(!applyMove(grid, rows, col, move, strlen(move) - 1, &heroes->data[heroIndex])) return 1;
-        printf("\nValid Move!\n\n"); system("PAUSE");
+        printf("\nValid Move!\n\n"); 
+        pause();
     }
     return 1;
 }

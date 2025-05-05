@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+static inline void pause(){
+    int c;
+    printf("Press ENTER to continue...\n");
+    getchar();
+}
+
 static inline void returnColChar(int x, char str[]){
     if(x < 26){
         str[0] = 'A' + x;

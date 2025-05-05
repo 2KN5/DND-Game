@@ -26,7 +26,7 @@ void heroDamage(char ***grid, int x, int y, Hero *hero, EnemyData *enemies, int 
     } else {
         printf("You have already attacked with this hero!\n\n");
     }
-    system("PAUSE");
+    pause();
 }
 
 int heroDefence(Hero hero){

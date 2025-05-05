@@ -370,8 +370,8 @@ void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enem
         free(roomMap[i]);
     }
     free(roomMap);
-
-    system("PAUSE");
+    
+    pause();
 }
 
 void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, char dif[], int level){

@@ -80,12 +80,13 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
 
     // Finding the number of enemies with a character in their range.
     for(int i = 0; i < maxEnemies; ++i){
-        int distance = 6, index = 0;
+        int distance = 6, enemyIndex, heroIndex;
         for(int j = 0; j < heroes->numberOfHeroes; ++j){
             int dx = abs(heroes->data[j].x - enemies.data[i].x), dy = abs(heroes->data[j].y - enemies.data[i].y);
             if(dx + dy < distance){
                 distance = dx + dy;
-                index = j;
+                enemyIndex = i;
+                heroIndex = j;
             }
         }
 
@@ -93,8 +94,8 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
         if(distance <= 5){
             canSee[count][0] = enemies.data[i].x;
             canSee[count][1] = enemies.data[i].y;
-            canSee[count][2] = index;
-            whichHero[count] = heroes->data[index].class;
+            canSee[count][2] = enemyIndex;
+            whichHero[count] = heroes->data[heroIndex].class;
             ++count;
         }
     }
@@ -112,16 +113,14 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
         if(dx + dy == 1){
             enemyDamage(grid, heroX, heroY, heroes, index);
         } else {
-            int pathLen;
+            int pathLen, enemyIndex = canSee[i][2];
             Point path[rows * col];
             if(findPath(*grid, rows, col, enemyX, enemyY, heroX, heroY, &pathLen, path)){
-                for(int j = 0; j < maxEnemies; ++j){
-                    if(enemies.data[j].x == canSee[i][0] && enemies.data[j].y == canSee[i][1]){
-                        (*grid)[enemies.data[j].x][enemies.data[j].y] = '.';
-                        enemies.data[j].x = path[pathLen - 1].x;
-                        enemies.data[j].y = path[pathLen - 1].y;
-                        (*grid)[enemies.data[j].x][enemies.data[j].y] = '0' + enemies.data[j].health;
-                    }
+                for(int i = 0; i < pathLen && i <= 10; ++i){
+                    (*grid)[enemies.data[enemyIndex].x][enemies.data[enemyIndex].y] = '.';
+                    enemies.data[enemyIndex].x = path[i].x;
+                    enemies.data[enemyIndex].y = path[i].y;
+                    (*grid)[enemies.data[enemyIndex].x][enemies.data[enemyIndex].y] = '0' + enemies.data[enemyIndex].health;  
                 }
             }
         }

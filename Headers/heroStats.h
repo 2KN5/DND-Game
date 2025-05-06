@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_PARTY_SIZE 4
+#define MAX_PARTY_SIZE 5
 
 typedef struct {
     char class;

@@ -18,7 +18,6 @@ int main(void){
     
     menu(&heroes, dif, &exitGame);
     if(exitGame) return 0;
-    heroStats(&heroes);
     
     // Set map restrictions.
     readMapRestrictions(&rows, &col);

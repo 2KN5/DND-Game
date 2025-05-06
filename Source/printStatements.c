@@ -12,17 +12,18 @@ void gameInstructions(){
     printf("---------------------------------------------------------------------\n");
     printf("Objective: Defeat all monsters on each level to progress.\n");
     printf("Grid Legend:\n");
-    printf("  # - Wall (impassable)\n");
+    printf("  # - Wall (Impassable)\n");
     printf("  . - Empty tile\n");
-    printf("  @ - Furniture (obstacle)\n");
-    printf("  B/D/E/W - Heroes (Barbarian, Dwarf, Elf, Wizard)\n");
-    printf("  1-9 - Enemies (value = remaining health)\n\n");
+    printf("  @ - Furniture (Obstacle)\n");
+    printf("  B/D/E/W/H - Heroes (Barbarian, Dwarf, Elf, Wizard, Healer)\n");
+    printf("  1-9 - Enemies (Value = Remaining health)\n\n");
 
     printf("Hero Classes:\n");
-    printf("  B: Barbarian | Health: 8 | Movement: 8 tiles\n");
-    printf("  D: Dwarf     | Health: 7 | Movement: 6 tiles\n");
-    printf("  E: Elf       | Health: 6 | Movement: 12 tiles\n");
-    printf("  W: Wizard    | Health: 4 | Movement: 10 tiles\n\n");
+    printf("  B: Barbarian | Health: 8  | Movement: 8 tiles   | Role: Frontline melee attacker\n");
+    printf("  D: Dwarf     | Health: 7  | Movement: 6 tiles   | Role: Melee with diagonal strikes\n");
+    printf("  E: Elf       | Health: 6  | Movement: 12 tiles  | Role: Ranged attacker (No adjacent targets)\n");
+    printf("  W: Wizard    | Health: 4  | Movement: 10 tiles  | Role: Ranged attacker (Ignores obstacles)\n");
+    printf("  H: Healer    | Health: 12 | Movement: 4 tiles   | Role: Restores health to allies (Cannot attack)\n\n");
 
     printf("Turn Structure:\n");
     printf("  - Each hero gets 2 actions (move + attack) per turn.\n");
@@ -33,15 +34,16 @@ void gameInstructions(){
     printf("  - B: Melee only (Adjacent tile)\n");
     printf("  - D: Melee + Diagonal\n");
     printf("  - E: Ranged (Line-of-sight without adjacent tiles)\n");
-    printf("  - W: Ranged (Ignores obstacles)\n\n");
+    printf("  - W: Ranged (Ignores obstacles)\n");
+    printf("  - H: Ranged, Up to 5 Tiles (Ignores obstacles)\n\n");
 
     printf("Dice Rolls:\n");
     printf("  - Heroes roll 3 dice when attacking, enemies roll 2.\n");
     printf("  - Defense: all roll 2 dice.\n");
     printf("  - Dice outcomes:\n");
-    printf("       - Skull (damage)\n");
-    printf("       - White Shield (hero defense)\n");
-    printf("       - Black Shield (enemy defense)\n\n");
+    printf("       - Skull (Damage)\n");
+    printf("       - White Shield (Hero Defense)\n");
+    printf("       - Black Shield (Enemy Defense)\n\n");
 
     printf("Commands:\n");
     printf("  B>L3U2   - Move Barbarian 3 Left, then 2 Up\n");
@@ -57,11 +59,12 @@ void printNOH(){
     printf("\nYou now stand at the gates of the dungeon...\n");
     printf("Assemble your party of brave heroes to face the dangers within.\n\n");
 
-    printf("Choose your champions (1 to 4 heroes):\n");
+    printf("Choose your champions (1 to %d heroes):\n", MAX_PARTY_SIZE);
     printf("  B - Barbarian: Mighty and fearless, a juggernaut of melee combat.\n");
     printf("  D - Dwarf: Sturdy and resilient, strikes from unexpected angles.\n");
     printf("  E - Elf: Agile and precise, deadly with ranged attacks.\n");
-    printf("  W - Wizard: Wise and powerful, commands arcane forces from afar.\n\n");
+    printf("  W - Wizard: Wise and powerful, commands arcane forces from afar.\n");
+    printf("  H - Healer: Compassionate and vital, restores allies' strength amidst chaos.\n\n");
 }
 
 void printInvalidNOH(){
@@ -71,8 +74,8 @@ void printInvalidNOH(){
 
 void printChooseHeroes(int remainingHeroes){
     printf("\nHeroes left to choose: %d\n\n", remainingHeroes);
-    printf("(B) Barbarian, (D) Dwarf, (E) Elf, (W) Wizard\n");
-    printf("Select a hero type -> ( B / D / E / W ): ");
+    printf("(B) Barbarian, (D) Dwarf, (E) Elf, (W) Wizard, (H) Healer\n");
+    printf("Select a hero type -> ( B / D / E / W / H): ");
 }
 
 void printDifficulty(){
@@ -99,8 +102,94 @@ void clearHero(HeroData *heroes){
     heroes->numberOfHeroes = 0;
 }
 
+void mapRestrictions(){
+    printf("\n==================================================\n");
+    printf("                   MAP RESTRICTIONS               \n");
+    printf("==================================================\n");
+    printf("\n- The map must be at least 10 x 10 in size. (Suggested)\n");
+    printf("- Maximum column width is 92 (Due to screen size).\n");
+    printf("- Size must allow enough space for all heroes, enemies, and furniture.\n\n");
+    printf("Enter map size (N x M): ");
+}
+
+void readMapRestrictions(int *rows, int *col){
+    char buffer[100] = {' '};
+    while(buffer[0] != '\n'){
+        clearScreen();
+        mapRestrictions();
+        while(scanf("%d%d", rows, col) != 2 || *rows < 10 || *col < 10 || *col > 92){
+            clearScreen();
+            mapRestrictions();
+            clearBuffer();
+        }
+        fgets(buffer, sizeof(buffer), stdin);
+    } 
+}
+
+void gameSettings(HeroData heroes, char str[], int noh){
+    clearScreen();
+    printf("\n==================================================\n");
+    printf("                    GAME SETTINGS                 \n");
+    printf("==================================================\n");
+    printf("\nDIFFICULTY         : %s\nYOUR PARTY INVOLVES: ", str);
+    for(int i = 0; i < noh; ++i){
+        printf("%c ", heroes.data[i].class);
+    }
+    printf("\n\nAre you ready to begin your adventure? (Y/N): Y\n");
+    printf("\n--------------------------------------------------\n");
+}
+
+void asking(HeroData heroes, char str[], int pSize){
+    char show;
+    gameSettings(heroes, str, pSize);
+    while(1){
+        printf("\nWould you like to review your heroes' abilities before you begin? (Y/N)\n> ");
+        if(!check(&show)){
+            clearScreen();
+            gameSettings(heroes, str, pSize);
+            printf("\nPardon? Please enter (Y/N) to proceed.\n");
+            continue;
+        }
+        clearScreen();
+        printf("\n");
+        if(show == 'Y'){
+            for(int i = 0; i < pSize; i++){   
+                printf("------------------------------------------------------------------\n");
+                printf(" > Class    : %c\n", heroes.data[i].class);
+                printf(" > HP       : %d\n", heroes.data[i].health);
+                printf(" > Movement : %d tiles per turn\n", heroes.data[i].numberOfMoves);
+                printf(" > Ability  : ");
+                if(heroes.data[i].class == 'B'){
+                    printf("High health and mobility, but no ranged attack.\n");
+                    printf("              Steel and rage. Nothing more, nothing less.\n");
+                } else if(heroes.data[i].class == 'D'){
+                    printf("Attacks enemies even in diagonal tiles with his axe.\n");
+                    printf("              Short in stature, tall in fury.\n");
+                } else if(heroes.data[i].class == 'E'){
+                    printf("Snipes enemies from afar, but can't hit what's adjacent.\n");
+                    printf("              A leaf on the wind. An arrow in your heart.\n");
+                } else if(heroes.data[i].class == 'H'){
+                    printf("Restores health to nearby allies instead of dealing damage.\n");
+                    printf("              A beacon of hope in the darkest depths.\n");
+                } else if(heroes.data[i].class == 'W'){
+                    printf("Can strike through walls and enemies with magic.\n");
+                    printf("              He sees what others fear to imagine.\n");
+                }
+            }
+            break;
+        } else if(show == 'N'){
+            clearScreen();
+            gameSettings(heroes, str, pSize);
+            printf("\nVery well. Let the journey unfold!\n\n");
+            break;
+        }
+    }
+    printf("------------------------------------------------------------------\n");
+    pause();
+}
+
 void printChoices(HeroData *heroes, char str[], char *first, int noh){
-    char second;
+    char second, third;
     while(1){
 
         // Always re-display settings.
@@ -118,6 +207,7 @@ void printChoices(HeroData *heroes, char str[], char *first, int noh){
         if(!check(first)) continue;
         clearScreen();
         if(*first == 'Y'){
+            asking(*heroes, str, noh);
             return; // Exit to starting menu.
         }
 
@@ -143,28 +233,4 @@ void printChoices(HeroData *heroes, char str[], char *first, int noh){
             return;
         } 
     }
-}
-
-void mapRestrictions(){
-    printf("\n==================================================\n");
-    printf("                   MAP RESTRICTIONS               \n");
-    printf("==================================================\n");
-    printf("\n- The map must be at least 10 x 10 in size. (Suggested)\n");
-    printf("- Maximum column width is 92 (Due to screen size).\n");
-    printf("- Size must allow enough space for all heroes, enemies, and furniture.\n\n");
-    printf("Enter map size (N x M): ");
-}
-
-void readMapRestrictions(int *rows, int *col){
-    char buffer[100] = {' '};
-    while(buffer[0] != '\n'){
-        clearScreen();
-        mapRestrictions();
-        while(scanf("%d%d", rows, col) != 2 || *rows < 10 || *col < 10 || *col > 92){
-            clearScreen();
-            mapRestrictions();
-            clearBuffer();
-        }
-        fgets(buffer, sizeof(buffer), stdin);
-    } 
 }

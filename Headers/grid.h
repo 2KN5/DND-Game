@@ -19,7 +19,6 @@ typedef struct {
 } Walls;
 
 // Grid creation and initialization
-void readMS(int *rows, int *col);
 void createSG(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]);
 void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]);
 void clear_Rooms_Hallway(char ***grid, int rows, int col);

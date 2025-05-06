@@ -19,7 +19,6 @@ void enemyDamage(char ***grid, int x, int y, HeroData *heroes, int index){
     } else {
         heroes->data[index].health -= totalDMG;
     }
-    pause();
 }
 
 int enemyDefence(Enemy enemy){

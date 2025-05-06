@@ -9,7 +9,6 @@ int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, Ene
             heroes->data[i].actions[1] = 1;
         }
         printf("\nTurn ended! Let's see what the enemies are up to...\n\n");
-        pause();
         return 0;
     }
     if(c == 'Q'){
@@ -28,20 +27,19 @@ int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, Ene
     return 2;
 }
 
-void playerActions(HeroData *heroes){
+int playerActions(HeroData *heroes){
     int total = 0;
     for(int i = 0; i < heroes->numberOfHeroes; ++i){
         total += heroes->data[i].actions[0] + heroes->data[i].actions[1];
     }
-    if(total == 0){
+    if(total == 0 && heroes->numberOfHeroes > 0){
         for(int i = 0; i < heroes->numberOfHeroes; ++i){
             heroes->data[i].actions[0] = 1;
             heroes->data[i].actions[1] = 1;
         }
-        printf("\nAll heroes have used their actions! Enemy turn begins...\n\n");
-        pause();
+        return 1;
     }
-    // return int and call enemy turn in startGame
+    return 0;
 }
 
 int checkAttack(char attack[], int length){

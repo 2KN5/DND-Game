@@ -14,6 +14,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
                 if(result == 'I'){
                     printGrid(grid, rows, col, *heroes, *enemies, dif, level);
                     printf("\nInvalid Move!\n");
+                    printf("\n > B>R3D2 (Move)\n > E>A*F5 (Attack)\n > M>I3 (Spawn/Remove Enemy)\n > X (End Turn)\n > Q (Quit)\n");
                 }
             } while(result == 'I');
             nextCommand = otherCommands(result, grid, rows, col, heroes, *enemies, dif, level);
@@ -25,13 +26,17 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
             } else if(!applyCommand(grid, rows, col, heroes, enemies, dif, result, move)){
                 printGrid(grid, rows, col, *heroes, *enemies, dif, level);
                 printf("\nInvalid Move!\n");
+                printf("\n > B>R3D2 (Move)\n > E>A*F5 (Attack)\n > M>I3 (Spawn/Remove Enemy)\n > X (End Turn)\n > Q (Quit)\n");
                 continue;
             }
-            playerActions(heroes);
+            if(playerActions(heroes)){
+                printf("\nAll heroes have used their actions! Enemy turn begins...\n\n");
+                pause();        
+            }
             printGrid(grid, rows, col, *heroes, *enemies, dif, level);
         }
         if(heroes->numberOfHeroes <= 0){
-            printf("All heroes have perished. Good luck next time.\n");
+            printf("\nAll heroes have perished. Good luck next time.\n");
             return;
         }
         // Update the level, free the grid, and create a new one.

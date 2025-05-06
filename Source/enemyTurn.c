@@ -80,12 +80,11 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
 
     // Finding the number of enemies with a character in their range.
     for(int i = 0; i < maxEnemies; ++i){
-        int distance = 6, enemyIndex, heroIndex;
+        int distance = 6, heroIndex;
         for(int j = 0; j < heroes->numberOfHeroes; ++j){
             int dx = abs(heroes->data[j].x - enemies.data[i].x), dy = abs(heroes->data[j].y - enemies.data[i].y);
             if(dx + dy < distance){
                 distance = dx + dy;
-                enemyIndex = i;
                 heroIndex = j;
             }
         }
@@ -94,19 +93,20 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
         if(distance <= 5){
             canSee[count][0] = enemies.data[i].x;
             canSee[count][1] = enemies.data[i].y;
-            canSee[count][2] = enemyIndex;
+            canSee[count][2] = i;
             whichHero[count] = heroes->data[heroIndex].class;
             ++count;
         }
     }
 
     for(int i = 0; i < count; ++i){
-        int index;
+        int index = -1;
         for(int j = 0; j < heroes->numberOfHeroes; ++j){
             if(heroes->data[j].class == whichHero[i]){
                 index = j;
             }
         }
+        if(index == -1) continue;
         int heroX = heroes->data[index].x, heroY = heroes->data[index].y;
         int enemyX = canSee[i][0], enemyY = canSee[i][1];
         int dx = abs(heroX - enemyX), dy = abs(heroY - enemyY);
@@ -117,12 +117,18 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
             Point path[rows * col];
             if(findPath(*grid, rows, col, enemyX, enemyY, heroX, heroY, &pathLen, path)){
                 for(int i = 0; i < pathLen && i <= 10; ++i){
-                    (*grid)[enemies.data[enemyIndex].x][enemies.data[enemyIndex].y] = '.';
-                    enemies.data[enemyIndex].x = path[i].x;
-                    enemies.data[enemyIndex].y = path[i].y;
-                    (*grid)[enemies.data[enemyIndex].x][enemies.data[enemyIndex].y] = '0' + enemies.data[enemyIndex].health;  
+                    char tile = (*grid)[path[i].x][path[i].y];
+                    if(!isalpha(tile)){
+                        (*grid)[enemies.data[enemyIndex].x][enemies.data[enemyIndex].y] = '.';
+                        enemies.data[enemyIndex].x = path[i].x;
+                        enemies.data[enemyIndex].y = path[i].y;
+                        (*grid)[path[i].x][path[i].y] = '0' + enemies.data[enemyIndex].health;  
+                    } else {
+                        break;
+                    }
                 }
             }
         }
     }
+    pause();
 }

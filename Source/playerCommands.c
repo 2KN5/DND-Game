@@ -357,6 +357,10 @@ int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *e
         printf("\nValid Attack at %s!\n\n", position);
         heroDamage(grid, x, y, &heroes->data[heroIndex], enemies, enemyIndex, position);
     } else {
+        if(checkHealerMove(heroes->data[heroIndex], move)){
+            healAbility(heroes, heroIndex);
+            return 1;
+        }
         if(!checkValidMoves(move, strlen(move) - 1, heroes->data[heroIndex])) return 0;
         if(!applyMove(grid, rows, col, move, strlen(move) - 1, &heroes->data[heroIndex])) return 1;
         printf("\nValid Move!\n\n"); 

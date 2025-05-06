@@ -38,3 +38,53 @@ int heroDefence(Hero hero){
     return def;
 }
 
+int maxHeroHealth(char class){
+    switch(class){
+        case 'B': return 8;
+        case 'W': return 4;
+        case 'D': return 7;
+        case 'E': return 6;
+        default: return 0;
+    }
+}
+void healAbility(HeroData *heroes, int healerIndex){
+    int count = 0;
+    if(heroes->data[healerIndex].actions[0]){
+        for(int i = 0; i < heroes->numberOfHeroes; i++){
+            if(healerIndex == i) continue;
+            int dx = abs(heroes->data[healerIndex].x - heroes->data[i].x);
+            int dy = abs(heroes->data[healerIndex].y - heroes->data[i].y);
+            if(dx + dy <= 5){
+                heroes->data[i].health += 2;
+                int maxhealth = maxHeroHealth(heroes->data[i].class);
+                if(maxhealth < heroes->data[i].health){
+                    heroes->data[i].health = maxhealth;
+                }
+                ++count;
+            }
+        }
+        if(!count){
+            printf("\nNo allies nearby!\n\n");
+        } else {
+            printf("\nHealed %d %s!\n\n", count, (count == 1 ? "ally" : "allies")); 
+            heroes->data[healerIndex].actions[0] = 0;
+        }
+    } else {
+        printf("\nYou have already healed nearby allies once!\n\n");
+    }
+    pause();
+}
+
+int checkHealerMove(Hero hero, char move[]){
+    int curr = 2, count = 0, length = strlen(move) - 1;
+    char str[5];
+    while(curr <= length){
+        if(!isalpha(move[curr])) return 0;
+        while(curr <= length){
+            str[count] = move[curr];
+            ++count; ++curr;
+        }
+    }
+    if(strcmp(str, "HEAL") != 0) return 0;
+    return 1;
+}

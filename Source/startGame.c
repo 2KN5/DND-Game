@@ -30,8 +30,8 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
                 continue;
             }
             if(playerActions(heroes)){
-                printf("\nAll heroes have used their actions! Enemy turn begins...\n\n");
-                pause();        
+                printf("All heroes have used their actions! Enemy turn begins...\n\n");
+                enemyTurn(grid, rows, col, heroes, *enemies);
             }
             printGrid(grid, rows, col, *heroes, *enemies, dif, level);
         }

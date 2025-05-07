@@ -80,14 +80,14 @@ void healAbility(HeroData *heroes, int healerIndex){
 
 int checkHealerMove(Hero hero, char move[]){
     int curr = 2, count = 0, length = strlen(move) - 1;
-    char str[5];
+    char str[6] = {0};
     while(curr <= length){
         if(!isalpha(move[curr])) return 0;
-        while(curr <= length){
-            str[count] = move[curr];
-            ++count; ++curr;
-        }
+        str[count] = move[curr];
+        ++count; ++curr;
+
     }
+    str[count] = '\0';
     if(strcmp(str, "HEAL") != 0) return 0;
     return 1;
 }

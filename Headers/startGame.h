@@ -16,6 +16,6 @@
 #include "commonFunc.h"
 
 // Starting the game
-void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], int level);
+void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], int level, int *quit);
 
 #endif

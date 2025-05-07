@@ -19,8 +19,8 @@ typedef struct {
 } Walls;
 
 // Grid creation and initialization
-void createSG(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]);
-void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]);
+void createSG(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]);
+void createGrid(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]);
 void clear_Rooms_Hallway(char ***grid, int rows, int col);
 
 // Room and hallway generation
@@ -36,12 +36,12 @@ void countRooms(char **grid, int rows, int col, int ***roomMap, int *count);
 
 // Room population
 void genFurniture(char ***grid, int rows, int col);
-void spawnHeroes(char ***grid, int rows, int col, HeroData *hero);
-void spawnEnemies(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, int roomArea[rows * col][2], int count);
-void populateRooms(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, int **roomMap, int numberOfRooms, char dif[]);
+void spawnHeroes(char ***grid, int rows, int col, HeroData *heroes);
+void spawnEnemies(char ***grid, int rows, int col, EnemyData *enemies, int roomArea[rows * col][2], int count);
+void populateRooms(char ***grid, int rows, int col, EnemyData *enemies, int **roomMap, int numberOfRooms, char dif[]);
 
 // Grid display and memory
-void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, char dif[], int level);
+void printGrid(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char dif[], int level);
 void freeGrid(char ***grid, int rows);
 
 // Column label utilities

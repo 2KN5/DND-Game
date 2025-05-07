@@ -8,7 +8,7 @@ int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, Ene
             heroes->data[i].actions[0] = 1;
             heroes->data[i].actions[1] = 1;
         }
-        printf("\nTurn ended! Let's see what the enemies are up to...\n\n");
+        printf("\nTurn ended! Let's see what the enemies are up to...\n");
         return 0;
     }
     if(c == 'Q'){
@@ -355,7 +355,7 @@ int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *e
 
         // Get damage and apply it to the enemy.
         printf("\nValid Attack at %s!\n\n", position);
-        heroDamage(grid, x, y, &heroes->data[heroIndex], enemies, enemyIndex, position);
+        heroDamage(grid, x, y, heroes, enemies, heroIndex, enemyIndex, position);
     } else {
         if(checkHealerMove(heroes->data[heroIndex], move)){
             healAbility(heroes, heroIndex);

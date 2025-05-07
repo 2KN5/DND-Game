@@ -88,41 +88,41 @@ void clear_Rooms_Hallway(char ***grid, int rows, int col){
     }
 }
 
-void spawnHeroes(char ***grid, int rows, int col, HeroData *hero){
+void spawnHeroes(char ***grid, int rows, int col, HeroData *heroes){
     int i = 0;
     char str[6];
-    while(i < hero->numberOfHeroes){
+    while(i < heroes->numberOfHeroes){
         int x = rand() % (rows - 2) + 1;
         int y = rand() % (col - 2) + 1;
         if((*grid)[x][y] == '.'){
-            (*grid)[x][y] = hero->data[i].class;
-            hero->data[i].x = x; 
-            hero->data[i].y = y;
-            getPositionChar(x + 1, y, hero->data[i].positionChar);
+            (*grid)[x][y] = heroes->data[i].class;
+            heroes->data[i].x = x; 
+            heroes->data[i].y = y;
+            getPositionChar(x + 1, y, heroes->data[i].positionChar);
             ++i;
         }
     }
 }
 
-void spawnEnemies(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, int roomArea[rows * col][2], int count){
+void spawnEnemies(char ***grid, int rows, int col, EnemyData *enemies, int roomArea[rows * col][2], int count){
     int noe = 0, attempts = 0;
-    while(noe < enemy->enemiesPerRoom && attempts < 1000){
+    while(noe < enemies->enemiesPerRoom && attempts < 1000){
         int x = roomArea[rand() % count][0];
         int y = roomArea[rand() % count][1];
         if((*grid)[x][y] == '.'){
-            int index = enemy->totalEnemies + noe;
-            (*grid)[x][y] = '0' + enemy->data[index].health;
-            enemy->data[index].x = x; 
-            enemy->data[index].y = y;
+            int index = enemies->totalEnemies + noe;
+            (*grid)[x][y] = '0' + enemies->data[index].health;
+            enemies->data[index].x = x; 
+            enemies->data[index].y = y;
             ++noe; 
         }
         ++attempts;
     }
-    enemy->totalEnemies += noe;
+    enemies->totalEnemies += noe;
 }
 
-void populateRooms(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, int **roomMap, int numberOfRooms, char dif[]){
-    enemy->totalEnemies = 0;
+void populateRooms(char ***grid, int rows, int col, EnemyData *enemies, int **roomMap, int numberOfRooms, char dif[]){
+    enemies->totalEnemies = 0;
     int area = rows * col;
     for(int room = 1; room <= numberOfRooms; ++room){
         int count = 0, roomArea[area][2];
@@ -147,8 +147,8 @@ void populateRooms(char ***grid, int rows, int col, HeroData *hero, EnemyData *e
         }
 
         // Spawn the enemies in every room.
-        enemyStats(enemy, dif);
-        spawnEnemies(grid, rows, col, hero, enemy, roomArea, count);
+        enemyStats(enemies, dif);
+        spawnEnemies(grid, rows, col, enemies, roomArea, count);
     }
 }
 
@@ -285,7 +285,7 @@ void drawHorizontal(char ***grid, int rows, int col, Walls wall[], int count){
     createDoor(grid, wall[count - 1].row, col - 2, wall[count - 1].column + 1);
 }
 
-void createSG(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]){
+void createSG(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]){
     // Create the starting grid.
     int **roomMap = (int**)malloc(sizeof(int*) * rows);
     *grid = (char**)malloc(sizeof(char*) * rows);
@@ -299,9 +299,9 @@ void createSG(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy,
     }
     int count;
     countRooms(*grid, rows, col, &roomMap, &count);
-    populateRooms(grid, rows, col, hero, enemy, roomMap, count, dif); // Generate at least 1 furniture per room.
+    populateRooms(grid, rows, col, enemies, roomMap, count, dif); // Generate at least 1 furniture per room.
     genFurniture(grid, rows, col); // Generate a couple more furniture.
-    spawnHeroes(grid, rows, col, hero); // Place heroes and enemies
+    spawnHeroes(grid, rows, col, heroes); // Place heroes and enemies
     
     // Free roomMap grid, can't use freeGrid, char not int
     for(int i = 0; i < rows; ++i){
@@ -310,7 +310,7 @@ void createSG(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy,
     free(roomMap);
 }
 
-void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enemy, char dif[]){
+void createGrid(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]){
     
     // Generating the grid for the next levels.
     int **roomMap = (int**)malloc(sizeof(int*) * rows);
@@ -344,10 +344,10 @@ void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enem
     int count;
     createHallway(grid, rows, col);
     countRooms(*grid, rows, col, &roomMap, &count);
-    populateRooms(grid, rows, col, hero, enemy, roomMap, count, dif); // Generate at least 1 furniture per room.
+    populateRooms(grid, rows, col, enemies, roomMap, count, dif); // Generate at least 1 furniture per room.
     genFurniture(grid, rows, col); // Generate a couple more furniture.
     clear_Rooms_Hallway(grid, rows, col);
-    spawnHeroes(grid, rows, col, hero); // Place heroes and enemies
+    spawnHeroes(grid, rows, col, heroes); // Place heroes and enemies
     
     // Free roomMap grid, can't use freeGrid, char not int
     for(int i = 0; i < rows; ++i){
@@ -358,7 +358,7 @@ void createGrid(char ***grid, int rows, int col, HeroData *hero, EnemyData *enem
     pause();
 }
 
-void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, char dif[], int level){
+void printGrid(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char dif[], int level){
 
     // Using the largest number as the width specifier.
     int width = numberOfDig(rows);
@@ -379,8 +379,8 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
         printf("%*d ", width, i + 1);
         for(int j = 0; j < col; ++j){
             int isHero = 1;
-            for(int k = 0; k < hero.numberOfHeroes; ++k){
-                if(hero.data[k].x == i && hero.data[k].y == j){
+            for(int k = 0; k < heroes.numberOfHeroes; ++k){
+                if(heroes.data[k].x == i && heroes.data[k].y == j){
                     printf("\033[0;32m");
                     printf("%2c ", (*grid)[i][j]);
                     printf("\033[0m");
@@ -390,8 +390,8 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
             }
             if(!isHero) continue;
             int isEnemy = 1;
-            for(int k = 0; k < enemy.totalEnemies; ++k){
-                if(enemy.data[k].x == i && enemy.data[k].y == j){
+            for(int k = 0; k < enemies.totalEnemies; ++k){
+                if(enemies.data[k].x == i && enemies.data[k].y == j){
                     printf("\033[0;31m");
                     printf("%2c ", (*grid)[i][j]);
                     printf("\033[0m");
@@ -411,11 +411,12 @@ void printGrid(char ***grid, int rows, int col, HeroData hero, EnemyData enemy, 
         printf("\n");
     }
     printf("\n--------------------------------------------------\n\n");
-    printf("Total Enemies: %d\n", enemy.totalEnemies);
+    printf("Total Enemies: %d\n", enemies.totalEnemies);
+    printf("Score        : %d\n", heroes.score);
     printf("\n--------------------------------------------------\n\n");
     printf("Hero Positions and Health:\n\n");
-    for(int i = 0; i < hero.numberOfHeroes; ++i){
-        printf(" > %c: %d, at %s\n", hero.data[i].class, hero.data[i].health, hero.data[i].positionChar);
+    for(int i = 0; i < heroes.numberOfHeroes; ++i){
+        printf(" > %c: %d, at %s\n", heroes.data[i].class, heroes.data[i].health, heroes.data[i].positionChar);
     }
     printf("\n--------------------------------------------------\n");
 }

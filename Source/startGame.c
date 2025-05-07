@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "startGame.h"
 
-void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], int level){
+void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], int level, int *quit){
     int nextCommand;
     char result, move[28];
     printGrid(grid, rows, col, *heroes, *enemies, dif, level);
@@ -22,6 +22,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
                 // Let the enemy play
                 enemyTurn(grid, rows, col, heroes, *enemies);
             } else if(nextCommand == 1){
+                *quit = 1;
                 return;
             } else if(!applyCommand(grid, rows, col, heroes, enemies, dif, result, move)){
                 printGrid(grid, rows, col, *heroes, *enemies, dif, level);
@@ -30,13 +31,16 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
                 continue;
             }
             if(playerActions(heroes)){
-                printf("All heroes have used their actions! Enemy turn begins...\n\n");
+                printGrid(grid, rows, col, *heroes, *enemies, dif, level);
+                printf("\nAll heroes have used their actions! Enemy turn begins...\n\n");
+                pause();
+                printGrid(grid, rows, col, *heroes, *enemies, dif, level);
                 enemyTurn(grid, rows, col, heroes, *enemies);
             }
             printGrid(grid, rows, col, *heroes, *enemies, dif, level);
         }
         if(heroes->numberOfHeroes <= 0){
-            printf("\nAll heroes have perished. Good luck next time.\n");
+            *quit = 0;
             return;
         }
         // Update the level, free the grid, and create a new one.

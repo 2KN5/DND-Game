@@ -10,7 +10,7 @@
 #include "commonFunc.h"
 
 // Player actions
-void heroDamage(char ***grid, int x, int y, Hero *hero, EnemyData *enemies, int index, char pos[]);
+void heroDamage(char ***grid, int x, int y, HeroData *heroes, EnemyData *enemies, int heroIndex, int enemyIndex, char pos[]);
 int heroDefence(Hero hero);
 
 // Healer Check

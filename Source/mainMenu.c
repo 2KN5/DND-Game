@@ -113,7 +113,7 @@ void menu(HeroData *heroes, char dif[], int *exitGame){
             // Convert to upper and compare.
             upperString(dif);
             if(strcmp(dif, "EASY") != 0 && strcmp(dif, "MEDIUM") != 0 && strcmp(dif, "HARD") != 0){
-                printf("\nEnter a valid difficulty! -> (Easy, Medium, Hard)\n");
+                printf("\n\nEnter a valid difficulty! -> (Easy, Medium, Hard)\n");
                 continue;
             }
             break;

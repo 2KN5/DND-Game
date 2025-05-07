@@ -18,10 +18,11 @@ typedef struct {
 typedef struct {
     Hero data[MAX_PARTY_SIZE];
     int numberOfHeroes;
+    int score;
 } HeroData;
 
 // Hero stats and reset after level clear
-void heroStats(HeroData *hero);
+void heroStats(HeroData *heroes);
 void resetHeroes(HeroData *heroes);
 
 #endif

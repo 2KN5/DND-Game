@@ -4,25 +4,27 @@
 #include "heroMove.h"
 #include "commonFunc.h"
 
-void heroDamage(char ***grid, int x, int y, Hero *hero, EnemyData *enemies, int index, char pos[]){
-    if(hero->actions[0]){
+void heroDamage(char ***grid, int x, int y, HeroData *heroes, EnemyData *enemies, int heroIndex, int enemyIndex, char pos[]){
+    if(heroes->data[heroIndex].actions[0]){
         int side, dmg = 0;
         for(int i = 0; i < 3; ++i){
             side = roll();
             if(side % 2 == 0) ++dmg;
         }
-        int enemyDef = enemyDefence(enemies->data[index]), totalDMG = (dmg - enemyDef <= 0 ? 0 : dmg - enemyDef);
-        printf("(%c) - Attacked with %d Skull(s)!\nMonster defended with %d Black Shield(s) and lost %d Body Point(s)!\n\n", hero->class, dmg, enemyDef, totalDMG);
-        if(enemies->data[index].health - totalDMG <= 0){
-            enemies->data[index].health = 0;
+        int enemyDef = enemyDefence(enemies->data[enemyIndex]), totalDMG = (dmg - enemyDef <= 0 ? 0 : dmg - enemyDef);
+        printf("(%c) - Attacked with %d Skull(s)!\nMonster defended with %d Black Shield(s) and lost %d Body Point(s)!\n\n", heroes->data[heroIndex].class, dmg, enemyDef, totalDMG);
+        heroes->score += (int)(totalDMG * 30);
+        if(enemies->data[enemyIndex].health - totalDMG <= 0){
+            enemies->data[enemyIndex].health = 0;
             (*grid)[x][y] = '.';
-            shiftEnemies(enemies, index);
+            shiftEnemies(enemies, enemyIndex);
             printf("Killed enemy at %s!\n\n", pos);
+            heroes->score += (int)(totalDMG * 50);
         } else {
-            enemies->data[index].health -= totalDMG;
-            (*grid)[x][y] = '0' + enemies->data[index].health;
+            enemies->data[enemyIndex].health -= totalDMG;
+            (*grid)[x][y] = '0' + enemies->data[enemyIndex].health;
         }
-        hero->actions[0] = 0;
+        heroes->data[heroIndex].actions[0] = 0;
     } else {
         printf("You have already attacked with this hero!\n\n");
     }

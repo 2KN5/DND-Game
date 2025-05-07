@@ -234,3 +234,21 @@ void printChoices(HeroData *heroes, char str[], char *first, int noh){
         } 
     }
 }
+
+void allHeroesDead(int score){
+    printf("\n==================================================\n");
+    printf("                 YOUR PARTY HAS FALLEN\n");
+    printf("==================================================\n");
+    printf("\nThe dungeon claims another set of brave souls...\n");
+    printf("Final Score: %d\n", score);
+    printf("\nBetter luck next time, adventurer.\n");
+}
+
+void playerQuit(int score){
+    printf("\n==================================================\n");
+    printf("               YOU HAVE LEFT THE DUNGEON\n");
+    printf("==================================================\n");
+    printf("\nYou've chosen to abandon your quest.\n");
+    printf("Final Score: %d\n", score);
+    printf("\nSometimes, retreat is the better part of valor.\n");
+}

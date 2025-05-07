@@ -2,28 +2,29 @@
 #include <stdlib.h>
 #include "heroStats.h"
 
-void heroStats(HeroData *hero)
+void heroStats(HeroData *heroes)
 {
-    for(int i = 0; i < hero->numberOfHeroes; i++)
+    heroes->score = 0;
+    for(int i = 0; i < heroes->numberOfHeroes; i++)
     {
-        if(hero->data[i].class == 'B'){
-            hero->data[i].health = 8;
-            hero->data[i].numberOfMoves = 8;
-        } else if(hero->data[i].class == 'W'){
-            hero->data[i].health = 4;
-            hero->data[i].numberOfMoves = 10;
-        } else if(hero->data[i].class == 'E'){
-            hero->data[i].health = 6;
-            hero->data[i].numberOfMoves = 12;
-        } else if(hero->data[i].class == 'D'){
-            hero->data[i].health = 7;
-            hero->data[i].numberOfMoves = 6;
-        } else if(hero->data[i].class == 'H'){
-            hero->data[i].health = 12;
-            hero->data[i].numberOfMoves = 4;
+        if(heroes->data[i].class == 'B'){
+            heroes->data[i].health = 8;
+            heroes->data[i].numberOfMoves = 8;
+        } else if(heroes->data[i].class == 'W'){
+            heroes->data[i].health = 4;
+            heroes->data[i].numberOfMoves = 10;
+        } else if(heroes->data[i].class == 'E'){
+            heroes->data[i].health = 6;
+            heroes->data[i].numberOfMoves = 12;
+        } else if(heroes->data[i].class == 'D'){
+            heroes->data[i].health = 7;
+            heroes->data[i].numberOfMoves = 6;
+        } else if(heroes->data[i].class == 'H'){
+            heroes->data[i].health = 12;
+            heroes->data[i].numberOfMoves = 4;
         }
-        hero->data[i].actions[0] = 1;
-        hero->data[i].actions[1] = 1;
+        heroes->data[i].actions[0] = 1;
+        heroes->data[i].actions[1] = 1;
     }
 }
 

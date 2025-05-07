@@ -20,6 +20,8 @@ void printDifficulty();
 void printChoices(HeroData *heroes, char str[], char *first, int noh);
 void gameSettings(HeroData heroes, char str[], int noh);
 void asking(HeroData heroes, char str[], int pSize);
+void allHeroesDead(int score);
+void playerQuit(int score);
 void mapRestrictions();
 
 // Input Handlers

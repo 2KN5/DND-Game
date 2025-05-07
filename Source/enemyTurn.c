@@ -130,5 +130,6 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
             }
         }
     }
+    printf("\n");
     pause();
 }

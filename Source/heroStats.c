@@ -26,3 +26,10 @@ void heroStats(HeroData *hero)
         hero->data[i].actions[1] = 1;
     }
 }
+
+void resetHeroes(HeroData *heroes){
+    for(int i = 0; i < heroes->numberOfHeroes; ++i){
+        heroes->data[i].actions[0] = 1;
+        heroes->data[i].actions[1] = 1;
+    }
+}

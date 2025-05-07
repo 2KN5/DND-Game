@@ -14,6 +14,7 @@ void heroDamage(char ***grid, int x, int y, Hero *hero, EnemyData *enemies, int 
 int heroDefence(Hero hero);
 
 // Healer Check
+int maxHeroHealth(char class);
 int checkHealerMove(Hero hero, char move[]);
 void healAbility(HeroData *heroes, int healerIndex);
 

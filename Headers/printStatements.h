@@ -7,15 +7,22 @@
 #include "heroStats.h"
 #include "enemyStats.h"
 
-// Printing the messages.
+// Utility
+void clearHero(HeroData *heroes);
+
+// Menu & UI Printouts
+void welcome();
 void gameInstructions();
 void printNOH();
 void printInvalidNOH();
 void printChooseHeroes(int remainingHeroes);
 void printDifficulty();
-void welcome();
+void printChoices(HeroData *heroes, char str[], char *first, int noh);
+void gameSettings(HeroData heroes, char str[], int noh);
+void asking(HeroData heroes, char str[], int pSize);
+void mapRestrictions();
 
-// Reading map restrictions
+// Input Handlers
 void readMapRestrictions(int *rows, int *col);
 
 #endif

@@ -42,6 +42,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
         // Update the level, free the grid, and create a new one.
         ++level;
         printf("\nLevel Cleared! Moving to the next one...\n\n");
+        resetHeroes(heroes);
         freeGrid(grid, rows);
 
         // Create the new grid.

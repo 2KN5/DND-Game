@@ -88,7 +88,7 @@ int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *h
         char validMoves[] = "UDLR";
     
         while(currMove <= length){
-            char str[3] = "\0", *ptr = strchr(validMoves, moves[currMove]);
+            char str[6] = "\0", *ptr = strchr(validMoves, moves[currMove]);
             int count = 0, nom, index = ptr - validMoves;
     
             // Count number of steps.

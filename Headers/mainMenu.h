@@ -12,8 +12,6 @@
 int validString(char c[]);
 
 // Menu display and hero selection
-void printChoices(HeroData *hero, char str[], char *first, int noh);
 void menu(HeroData *hero, char dif[], int *exitGame);
-
 
 #endif

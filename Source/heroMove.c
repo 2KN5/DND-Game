@@ -47,6 +47,7 @@ int maxHeroHealth(char class){
         default: return 0;
     }
 }
+
 void healAbility(HeroData *heroes, int healerIndex){
     int count = 0;
     if(heroes->data[healerIndex].actions[0]){

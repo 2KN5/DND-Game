@@ -15,9 +15,6 @@
 #include "mainMenu.h"
 #include "commonFunc.h"
 
-// For the other commands
-int otherCommands(char c, char ***grid, int rows, int col, HeroData *heroes, EnemyData enemies, char dif[], int level);
-
 // Starting the game
 void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], int level);
 

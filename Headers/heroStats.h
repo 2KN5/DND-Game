@@ -20,7 +20,8 @@ typedef struct {
     int numberOfHeroes;
 } HeroData;
 
-// Applying the hero stats
+// Hero stats and reset after level clear
 void heroStats(HeroData *hero);
+void resetHeroes(HeroData *heroes);
 
 #endif

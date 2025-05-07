@@ -8,7 +8,9 @@
         "mainmenu.h": "c",
         "startgame.h": "c",
         "commonfunc.h": "c",
-        "limits": "c"
+        "limits": "c",
+        "stdlib.h": "c",
+        "enemymove.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

@@ -14,10 +14,11 @@ static inline void pause(){
 }
 
 static inline void returnColChar(int x, char str[]){
+    // MAX_NUMBER = 99
     if(x < 26){
         str[0] = 'A' + x;
         str[1] = '\0';
-    } else if(x <= 100){
+    } else if(x < 100){
         str[0] = 'A' + x / 26 - 1;
         str[1] = 'A' + x % 26;
         str[2] = '\0';

@@ -106,8 +106,8 @@ void mapRestrictions(){
     printf("\n==================================================\n");
     printf("                   MAP RESTRICTIONS               \n");
     printf("==================================================\n");
-    printf("\n- The map must be at least 10 x 10 in size. (Suggested)\n");
-    printf("- Maximum column width is 92 (Due to screen size).\n");
+    printf("\n- Maximum map size is: 100 x 100.");
+    printf("\n- The map must be at least 10 x 10 in size. (Recommended)\n");
     printf("- Size must allow enough space for all heroes, enemies, and furniture.\n\n");
     printf("Enter map size (N x M): ");
 }
@@ -117,7 +117,7 @@ void readMapRestrictions(int *rows, int *col){
     while(buffer[0] != '\n'){
         clearScreen();
         mapRestrictions();
-        while(scanf("%d%d", rows, col) != 2 || *rows < 10 || *col < 10 || *col > 92){
+        while(scanf("%d%d", rows, col) != 2 || *rows < MIN_ROWS || *rows > MAX_ROWS || *col < MIN_COLUMNS || *col > MAX_COLUMNS){
             clearScreen();
             mapRestrictions();
             clearBuffer();
@@ -184,7 +184,7 @@ void asking(HeroData heroes, char str[], int pSize){
             break;
         }
     }
-    printf("------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------\n\n");
     pause();
 }
 

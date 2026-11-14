@@ -22,7 +22,7 @@ void printColChar(int x, int width){
 void getPositionChar(int x, int y, char pos[]){
     char numbers[3];
     returnColChar(y, pos);
-    sprintf(numbers, "%d", x);
+    snprintf(numbers, sizeof(numbers), "%d", x);
     strcat(pos, "-");
     strcat(pos, numbers);
 }

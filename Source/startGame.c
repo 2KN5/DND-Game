@@ -50,8 +50,8 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
         freeGrid(grid, rows);
 
         // Create the new grid.
-        rows += 4; col += 4;
-        createGrid(grid, rows, col, heroes, enemies, dif);
-        printGrid(grid, rows, col, *heroes, *enemies, dif, level);
+        int newRows = fmin(round(rows * 1.15), 100), newCol = fmin(round(col * 1.15), 100); // Both cap at 100.
+        createGrid(grid, newRows, newCol, heroes, enemies, dif);
+        printGrid(grid, newRows, newCol, *heroes, *enemies, dif, level);
     }
 }

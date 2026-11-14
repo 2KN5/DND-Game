@@ -8,7 +8,7 @@
 
 typedef struct {
     char class;
-    char positionChar[7];
+    char positionChar[6]; 
     int x, y;
     int health;
     int numberOfMoves;

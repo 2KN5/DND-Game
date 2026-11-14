@@ -11,7 +11,7 @@ int main(void){
     
     // Variables.
     int rows, col, exitGame = 0, level = 1, quit;
-    char **grid, dif[10], pos[6];
+    char **grid, dif[10];
     
     HeroData heroes;
     EnemyData enemies;

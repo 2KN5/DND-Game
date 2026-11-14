@@ -340,7 +340,7 @@ int canAttack(char ***grid, int rows, int col, int enemyX, int enemyY, HeroData 
 int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]){
     int x, y, curr;
     int heroIndex = getHeroIndex(*heroes, move[0]);
-    char position[6];
+    char position[6]; // Max position is: 2 Characters + "-" + 2 Digits + "\0". 
 
     if(command == 'M'){
         curr = 2;

@@ -116,13 +116,13 @@ void enemyTurn(char ***grid, int rows, int col, HeroData *heroes, EnemyData enem
             int pathLen, enemyIndex = canSee[i][2];
             Point path[rows * col];
             if(findPath(*grid, rows, col, enemyX, enemyY, heroX, heroY, &pathLen, path)){
-                for(int i = 0; i < pathLen && i <= 10; ++i){
-                    char tile = (*grid)[path[i].x][path[i].y];
+                for(int s = 0; s < pathLen && s <= 10; ++s){
+                    char tile = (*grid)[path[s].x][path[s].y];
                     if(!isalpha(tile)){
                         (*grid)[enemies.data[enemyIndex].x][enemies.data[enemyIndex].y] = '.';
-                        enemies.data[enemyIndex].x = path[i].x;
-                        enemies.data[enemyIndex].y = path[i].y;
-                        (*grid)[path[i].x][path[i].y] = '0' + enemies.data[enemyIndex].health;  
+                        enemies.data[enemyIndex].x = path[s].x;
+                        enemies.data[enemyIndex].y = path[s].y;
+                        (*grid)[path[s].x][path[s].y] = '0' + enemies.data[enemyIndex].health;
                     } else {
                         break;
                     }

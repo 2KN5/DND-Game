@@ -23,6 +23,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
                 enemyTurn(grid, rows, col, heroes, *enemies);
             } else if(nextCommand == 1){
                 *quit = 1;
+                freeGrid(grid, rows);
                 return;
             } else if(!applyCommand(grid, rows, col, heroes, enemies, dif, result, move)){
                 printGrid(grid, rows, col, *heroes, *enemies, dif, level);
@@ -41,6 +42,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
         }
         if(heroes->numberOfHeroes <= 0){
             *quit = 0;
+            freeGrid(grid, rows);
             return;
         }
         // Update the level, free the grid, and create a new one.
@@ -49,9 +51,13 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
         resetHeroes(heroes);
         freeGrid(grid, rows);
 
-        // Create the new grid.
-        int newRows = fmin(round(rows * 1.15), 100), newCol = fmin(round(col * 1.15), 100); // Both cap at 100.
-        createGrid(grid, newRows, newCol, heroes, enemies, dif);
-        printGrid(grid, newRows, newCol, *heroes, *enemies, dif, level);
+        /* Grow the map ~15% per level, capped. These must be assigned back to
+           rows/col: the rest of the loop and the freeGrid above, use them. */
+        rows = (rows * 115 + 50) / 100;
+        col  = (col  * 115 + 50) / 100;
+        if(rows > MAX_GRID_SIZE) rows = MAX_GRID_SIZE;
+        if(col  > MAX_GRID_SIZE) col  = MAX_GRID_SIZE;
+        createGrid(grid, rows, col, heroes, enemies, dif);
+        printGrid(grid, rows, col, *heroes, *enemies, dif, level);
     }
 }

@@ -6,9 +6,17 @@
 
 #define MAX_PARTY_SIZE 5
 
+#define MIN_GRID_SIZE 10
+#define MAX_GRID_SIZE 99
+
+#define MAX_POSITION_LEN 6
+
+// Keeps the buffer size and the grid cap from drifting apart.
+_Static_assert(MAX_GRID_SIZE <= 99, "Position buffers assume at most 2 digits and 2 letters");
+
 typedef struct {
     char class;
-    char positionChar[6]; 
+    char positionChar[MAX_POSITION_LEN];
     int x, y;
     int health;
     int numberOfMoves;

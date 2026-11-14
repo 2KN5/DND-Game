@@ -36,7 +36,7 @@ void menu(HeroData *heroes, char dif[], int *exitGame){
                 printf("Please enter a number between 1 and %d, or (%d) to Exit:\n> ", MAX_PARTY_SIZE, MAX_PARTY_SIZE + 1);
                 clearBuffer();
             }
-            fgets(buffer, sizeof(buffer), stdin);
+            readLine(buffer, sizeof(buffer));
             clearScreen();
         }
         if(n == MAX_PARTY_SIZE + 1){
@@ -54,7 +54,7 @@ void menu(HeroData *heroes, char dif[], int *exitGame){
                 // Menu.
                 char chooseClass[3]; 
                 printChooseHeroes(n - partySize);
-                fgets(chooseClass, sizeof(chooseClass), stdin);
+                readLine(chooseClass, sizeof(chooseClass));
                 clearScreen();
 
                 // Checking if user entered > 1 characters.
@@ -100,7 +100,7 @@ void menu(HeroData *heroes, char dif[], int *exitGame){
         // Set difficulty.
         while(1){
             printDifficulty();
-            fgets(dif, 10, stdin);
+            readLine(dif, 10);
             clearScreen();
 
             // Check if value entered has a valid length.

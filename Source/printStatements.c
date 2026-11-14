@@ -106,8 +106,8 @@ void mapRestrictions(){
     printf("\n==================================================\n");
     printf("                   MAP RESTRICTIONS               \n");
     printf("==================================================\n");
-    printf("\n- Maximum map size is: 100 x 100.");
-    printf("\n- The map must be at least 10 x 10 in size. (Recommended)\n");
+    printf("\n- Maximum map size is: %d x %d.", MAX_GRID_SIZE, MAX_GRID_SIZE);
+    printf("\n- The map must be at least %d x %d in size. (Recommended)\n", MIN_GRID_SIZE, MIN_GRID_SIZE);
     printf("- Size must allow enough space for all heroes, enemies, and furniture.\n\n");
     printf("Enter map size (N x M): ");
 }
@@ -122,7 +122,7 @@ void readMapRestrictions(int *rows, int *col){
             mapRestrictions();
             clearBuffer();
         }
-        fgets(buffer, sizeof(buffer), stdin);
+        readLine(buffer, sizeof(buffer));
     } 
 }
 

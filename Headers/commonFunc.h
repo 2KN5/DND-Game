@@ -7,13 +7,32 @@
 #include "enemyStats.h"
 #include "heroStats.h"
 
+static inline void inputClosed(void){
+    printf("\nInput stream closed. Exiting...\n");
+    exit(EXIT_SUCCESS);
+}
+
+static inline void readLine(char buf[], int size){
+    if(fgets(buf, size, stdin) == NULL) inputClosed();
+}
+
+/* The grid allocations were previously unchecked, so a failed malloc would
+   have been dereferenced straight away. */
+static inline void *checkedMalloc(size_t size){
+    void *p = malloc(size);
+    if(p == NULL){
+        printf("\nOut of memory.\n");
+        exit(EXIT_FAILURE);
+    }
+    return p;
+}
+
 static inline void pause(){
     printf("Press ENTER to continue...\n");
-    getchar();
+    if(getchar() == EOF) inputClosed();
 }
 
 static inline void returnColChar(int x, char str[]){
-    // MAX_NUMBER = 99
     if(x < 26){
         str[0] = 'A' + x;
         str[1] = '\0';
@@ -40,8 +59,8 @@ static inline void shiftHeroes(HeroData *heroes, int index){
 
 static inline int check(char *choice){
     char buffer[100];
-    fgets(buffer, sizeof(buffer), stdin);
-    if(buffer[1] != '\n') return 0;
+    readLine(buffer, sizeof(buffer));
+    if(buffer[0] == '\0' || buffer[1] != '\n') return 0;
     *choice = toupper(buffer[0]);
     return (*choice == 'N' || *choice == 'Y' ? 1 : 0);
 }
@@ -55,6 +74,7 @@ static inline void upperString(char *str){
 static inline void clearBuffer(){
     int c;
     while((c = getchar()) != '\n' && c != EOF);
+    if(c == EOF) inputClosed();
 }
 
 static inline int roll(){

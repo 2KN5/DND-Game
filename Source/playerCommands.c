@@ -61,8 +61,8 @@ int checkValidMoves(char moves[], int length, Hero hero){
         if(isalpha(moves[currMove + 1])) return 0;
         ++currMove;
         while(currMove <= length && isdigit(moves[currMove])){
+            if(count >= 2) return 0; // No hero has a 3-digit move count.
             str[count] = moves[currMove];
-            ++currMove; ++count;
         }
         totalMoves += atoi(str);
     }
@@ -77,7 +77,7 @@ int checkValidMoves(char moves[], int length, Hero hero){
 void updatePositionChar(int x, int y, char pos[]){
     char numbers[3];
     returnColChar(y, pos);
-    sprintf(numbers, "%d", x);
+    snprintf(numbers, sizeof(numbers), "%d", x);
     strcat(pos, "-");
     strcat(pos, numbers);
 }
@@ -94,6 +94,7 @@ int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *h
             // Count number of steps.
             ++currMove;
             while(currMove <= length && isdigit(moves[currMove])){
+                if(count >= 2) return 0; // checkValidMoves enforces this too.
                 str[count] = moves[currMove];
                 ++currMove; ++count;
             }
@@ -216,7 +217,7 @@ int checkString(char str[], int length, HeroData heroes){
 
 char checkMove(HeroData heroes, char move[]){
     printf("\nMake your move: ");
-    fgets(move, 28, stdin);
+    readLine(move, 28);
     int length = strlen(move) - 1;
     if(!checkString(move, length, heroes)){
         return 'I';
@@ -259,6 +260,7 @@ int getCoords(char str[], int index, int rows, int col, int *x, int *y, char pos
     // Get column coordinates.
     int i = 0;
     while(index <= length && isalpha(str[index])){
+        if(i >= 2) return 0; // Column labels are at most 2 letters.
         letters[i] = str[index];
         pos[i] = letters[i];
         ++index; ++i;
@@ -271,6 +273,7 @@ int getCoords(char str[], int index, int rows, int col, int *x, int *y, char pos
     // Get row coordinates.
     int j = 0;
     while(index <= length && isdigit(str[index])){
+        if(j >= 2) return 0; // Row labels are at most 2 digits.
         numbers[j] = str[index];
         pos[j + i] = numbers[j];
         ++index; ++j;
@@ -340,7 +343,7 @@ int canAttack(char ***grid, int enemyX, int enemyY, HeroData heroes, int index){
 int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]){
     int x, y, curr;
     int heroIndex = getHeroIndex(*heroes, move[0]);
-    char position[6]; // Max position is: 2 Characters + "-" + 2 Digits + "\0". 
+    char position[MAX_POSITION_LEN];
 
     if(command == 'M'){
         curr = 2;

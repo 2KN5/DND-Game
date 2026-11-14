@@ -14,6 +14,7 @@ typedef struct {
     Enemy *data;
     int totalEnemies;
     int enemiesPerRoom;
+    int capacity;
 } EnemyData;
 
 // Single enemy spawn, for the M command

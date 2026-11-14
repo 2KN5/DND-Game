@@ -13,6 +13,7 @@ void spawnSingleEnemy(EnemyData *enemy, char dif[], int x, int y){
     } else {
         lowerBound = 7; upperBound = 9;
     }
+    if(enemy->totalEnemies >= enemy->capacity) return;
     int index = enemy->totalEnemies;
     enemy->data[index].health = rand() % (upperBound - lowerBound + 1) + lowerBound;
     enemy->data[index].numberOfMoves = 10;
@@ -32,6 +33,12 @@ void enemyStats(EnemyData *enemy, char dif[]){
         enemy->enemiesPerRoom = rand() % 6 + 1;
         lowerBound = 7; upperBound = 9;
     }
+
+    if((enemy->totalEnemies + enemy->enemiesPerRoom) > enemy->capacity){
+        enemy->enemiesPerRoom = enemy->capacity - enemy->totalEnemies;
+        if(enemy->enemiesPerRoom < 0) enemy->enemiesPerRoom = 0;
+    }
+
     for(int i = 0; i < enemy->enemiesPerRoom; i++){
         int index = enemy->totalEnemies + i;
         enemy->data[index].health = rand() % (upperBound - lowerBound + 1) + lowerBound;

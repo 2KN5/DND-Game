@@ -46,6 +46,7 @@ int maxHeroHealth(char class){
         case 'W': return 4;
         case 'D': return 7;
         case 'E': return 6;
+        case 'H': return 12;  // Must match heroStats(). Omitting it zeroed the healer.
         default: return 0;
     }
 }
@@ -83,6 +84,7 @@ int checkHealerMove(char move[]){
     char str[6] = {0};
     while(curr <= length){
         if(!isalpha(move[curr])) return 0;
+        if(count >= 4) return 0; // The only command here is "HEAL".
         str[count] = move[curr];
         ++count; ++curr;
 

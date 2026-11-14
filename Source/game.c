@@ -22,7 +22,15 @@ int main(void){
     
     // Set map restrictions.
     readMapRestrictions(&rows, &col);
-    enemies.data = malloc(sizeof(Enemy) * (rows * col));
+
+    /* The map grows between levels, so size this for the largest map the game
+    can ever reach rather than the starting dimensions. */
+    enemies.capacity = MAX_GRID_SIZE * MAX_GRID_SIZE;
+    enemies.data = malloc(sizeof(Enemy) * enemies.capacity);
+    if(enemies.data == NULL){
+        printf("Out of memory.\n");
+        return 1;
+    }
     
     // Generate the map.
     printf("\nCreating map...\n\n"); pause();
@@ -39,8 +47,7 @@ int main(void){
         allHeroesDead(heroes.score);
     }
 
-    // Free the grid.
+    // Free the grid (StartGame owns the grid once it starts resizing it.)
     free(enemies.data);
-    freeGrid(&grid, rows);
     return 0;
 }

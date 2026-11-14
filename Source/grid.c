@@ -110,6 +110,7 @@ void spawnEnemies(char ***grid, int rows, int col, EnemyData *enemies, int roomA
         int y = roomArea[rand() % count][1];
         if((*grid)[x][y] == '.'){
             int index = enemies->totalEnemies + noe;
+            if(index >= enemies->capacity) break;
             (*grid)[x][y] = '0' + enemies->data[index].health;
             enemies->data[index].x = x; 
             enemies->data[index].y = y;
@@ -182,10 +183,10 @@ void drawVertical_TOP(char ***grid, int rows, int col, Walls wall[], int *count)
         }
     }
 
-    // Connect to the next wall.
-    if(*count == 1) return;
+    // Connect to the next wall (0 walls leaves wall[] unwritten, so bail too).
+    if(*count <= 1) return;
     int prevCol = wall[0].column, prevRow = wall[0].row, curr = 1;
-    for(int j = wall[curr].column; j <= wall[*count - 1].column; ++j){
+    for(int j = wall[curr].column; curr < *count && j <= wall[*count - 1].column; ++j){
         if(j == wall[curr].column){
             for(int k = wall[curr].row; k >= prevRow; --k){
                 //(*grid)[k][prevCol] = (rand() % WALL_CHANCE == 0 ? '.' : '#');
@@ -221,10 +222,10 @@ void drawVertical_BOTTOM(char ***grid, int rows, int col, Walls wall[], int *cou
         }
     }
     
-    // Connect to the next wall.
-    if(*count == 1) return;
+    // Connect to the next wall (0 walls leaves wall[] unwritten, so bail too).
+    if(*count <= 1) return;
     int prevCol = wall[0].column, prevRow = wall[0].row, curr = 1;
-    for(int j = wall[curr].column; j <= wall[*count - 1].column; ++j){
+    for(int j = wall[curr].column; curr < *count && j <= wall[*count - 1].column; ++j){
         if(j == wall[curr].column){
             for(int k = wall[curr].row; k < prevRow; ++k){
                 //(*grid)[k][prevCol] = (rand() % WALL_CHANCE == 0 ? '.' : '#');
@@ -263,7 +264,7 @@ void drawHorizontal(char ***grid, int col, Walls wall[], int count){
 
     // Connect all the other columns.
     int prevCol = wall[0].column, curr = 1;
-    for(int j = wall[curr].column; j <= wall[count - 1].column; ++j){
+    for(int j = wall[curr].column; curr < count && j <= wall[count - 1].column; ++j){
         if(j == wall[curr].column){
             for(int k = prevCol; k < wall[curr].column; ++k){
                 //(*grid)[wall[curr].row][k] = (rand() % WALL_CHANCE == 0 ? '.' : '#');
@@ -285,11 +286,11 @@ void drawHorizontal(char ***grid, int col, Walls wall[], int count){
 
 void createSG(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]){
     // Create the starting grid.
-    int **roomMap = (int**)malloc(sizeof(int*) * rows);
-    *grid = (char**)malloc(sizeof(char*) * rows);
+    int **roomMap = (int**)checkedMalloc(sizeof(int*) * rows);
+    *grid = (char**)checkedMalloc(sizeof(char*) * rows);
     for(int i = 0; i < rows; ++i){
-        (*grid)[i] = (char*)malloc(sizeof(char) * col);
-        roomMap[i] = (int*)malloc(sizeof(int) * col);
+        (*grid)[i] = (char*)checkedMalloc(sizeof(char) * col);
+        roomMap[i] = (int*)checkedMalloc(sizeof(int) * col);
         for(int j = 0; j < col; ++j){
             (*grid)[i][j] = (i == 0 || i == rows - 1 || j == 0 || j == col - 1 ? '#' : '.');
             roomMap[i][j] = -1;
@@ -311,11 +312,11 @@ void createSG(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enem
 void createGrid(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[]){
     
     // Generating the grid for the next levels.
-    int **roomMap = (int**)malloc(sizeof(int*) * rows);
-    *grid = (char**)malloc(sizeof(char*) * rows);
+    int **roomMap = (int**)checkedMalloc(sizeof(int*) * rows);
+    *grid = (char**)checkedMalloc(sizeof(char*) * rows);
     for(int i = 0; i < rows; ++i){
-        (*grid)[i] = (char*)malloc(sizeof(char) * col);
-        roomMap[i] = (int*)malloc(sizeof(int) * col);
+        (*grid)[i] = (char*)checkedMalloc(sizeof(char) * col);
+        roomMap[i] = (int*)checkedMalloc(sizeof(int) * col);
         for(int j = 0; j < col; ++j){
             (*grid)[i][j] = (i == 0 || i == rows - 1 || j == 0 || j == col - 1 ? '#' : '.');
             roomMap[i][j] = -1;
@@ -324,13 +325,13 @@ void createGrid(char ***grid, int rows, int col, HeroData *heroes, EnemyData *en
     
     // Generating the upper walls.
     int countU = 0;
-    Walls *upperWalls = malloc(sizeof(Walls) * col);
+    Walls *upperWalls = checkedMalloc(sizeof(Walls) * col);
     drawVertical_TOP(grid, rows, col, upperWalls, &countU);
     drawHorizontal(grid, col, upperWalls, countU);
 
     // Generating the lower walls.
     int countL = 0;
-    Walls *lowerWalls = malloc(sizeof(Walls) * col);
+    Walls *lowerWalls = checkedMalloc(sizeof(Walls) * col);
     drawVertical_BOTTOM(grid, rows, col, lowerWalls, &countL);
     drawHorizontal(grid, col, lowerWalls, countL);
 

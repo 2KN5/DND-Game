@@ -83,10 +83,11 @@ static inline int roll(){
 
 static inline void clearScreen(){
     #ifdef _WIN32
-        system("cls");
+        int r = system("cls");
     #else
-        system("clear");
+        int r = system("clear");
     #endif
+    (void)r;
 }
 
 #endif

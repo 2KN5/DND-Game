@@ -9,7 +9,7 @@ void enemyDamage(char ***grid, int x, int y, HeroData *heroes, int index){
         side = roll();
         if(side % 2 == 0) ++dmg;
     }
-    int heroDef = heroDefence(heroes->data[index]), totalDMG = (dmg - heroDef <= 0 ? 0 : dmg - heroDef);;
+    int heroDef = heroDefence(), totalDMG = (dmg - heroDef <= 0 ? 0 : dmg - heroDef);;
     printf("\n(%c) - Was attacked with %d Skull(s)!\nHe defended with %d White Shield(s)!\n", heroes->data[index].class, dmg, heroDef);
     if(heroes->data[index].health - totalDMG <= 0){
         heroes->data[index].health = 0;
@@ -21,7 +21,7 @@ void enemyDamage(char ***grid, int x, int y, HeroData *heroes, int index){
     }
 }
 
-int enemyDefence(Enemy enemy){
+int enemyDefence(void){
     int side, def = 0;
     for(int i = 0; i < 2; ++i){
         side = roll();

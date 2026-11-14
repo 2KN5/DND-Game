@@ -15,7 +15,6 @@ int main(void){
     
     HeroData heroes;
     EnemyData enemies;
-    enemies.data = malloc(sizeof(Enemy) * (rows * col));
     
     // Main Menu
     menu(&heroes, dif, &exitGame);

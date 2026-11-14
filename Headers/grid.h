@@ -28,7 +28,7 @@ void createHallway(char ***grid, int rows, int col);
 void createDoor(char ***grid, int currentRow, int upper, int lower);
 void drawVertical_TOP(char ***grid, int rows, int col, Walls wall[], int *count);
 void drawVertical_BOTTOM(char ***grid, int rows, int col, Walls wall[], int *count);
-void drawHorizontal(char ***grid, int rows, int col, Walls wall[], int count);
+void drawHorizontal(char ***grid, int col, Walls wall[], int count);
 
 // Room processing and labeling
 void floodFillRoom(char **grid, int rows, int col, int ***roomMap, int x, int y, int roomID);

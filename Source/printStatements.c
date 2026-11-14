@@ -117,7 +117,7 @@ void readMapRestrictions(int *rows, int *col){
     while(buffer[0] != '\n'){
         clearScreen();
         mapRestrictions();
-        while(scanf("%d%d", rows, col) != 2 || *rows < MIN_ROWS || *rows > MAX_ROWS || *col < MIN_COLUMNS || *col > MAX_COLUMNS){
+        while(scanf("%d%d", rows, col) != 2 || *rows < MIN_GRID_SIZE || *rows > MAX_GRID_SIZE || *col < MIN_GRID_SIZE || *col > MAX_GRID_SIZE){
             clearScreen();
             mapRestrictions();
             clearBuffer();
@@ -189,7 +189,7 @@ void asking(HeroData heroes, char str[], int pSize){
 }
 
 void printChoices(HeroData *heroes, char str[], char *first, int noh){
-    char second, third;
+    char second;
     while(1){
 
         // Always re-display settings.

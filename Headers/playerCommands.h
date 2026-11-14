@@ -14,19 +14,19 @@
 #include "commonFunc.h"
 
 // Attack and targeting
-int canAttack(char ***grid, int rows, int col, int x, int y, HeroData heroes, char move[], int heroIndex);
-int checkAttack(char attack[], int length);
+int canAttack(char ***grid, int x, int y, HeroData heroes, int heroIndex);
+int checkAttack(char attack[]);
 
 // Enemy management
-void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], int x, int y, char pos[]);
+void cdEnemy(char ***grid, EnemyData *enemies, char dif[], int x, int y, char pos[]);
 int getEnemyIndex(EnemyData enemies, int x, int y);
 void shiftEnemies(EnemyData *enemies, int index);
 
 // Hero and input management
 int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *enemies, char dif[], char command, char move[]);
 int applyMove(char ***grid, int rows, int col, char moves[], int length, Hero *hero);
-int checkHealerMove(Hero hero, char move[]);
-char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char move[]);
+int checkHealerMove(char move[]);
+char checkMove(HeroData heroes, char move[]);
 int getCoords(char str[], int index, int rows, int col, int *x, int *y, char pos[]);
 int getHeroIndex(HeroData heroes, char hero);
 int isHero(char c, HeroData heroes);

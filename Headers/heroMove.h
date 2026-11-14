@@ -11,11 +11,11 @@
 
 // Player actions
 void heroDamage(char ***grid, int x, int y, HeroData *heroes, EnemyData *enemies, int heroIndex, int enemyIndex, char pos[]);
-int heroDefence(Hero hero);
+int heroDefence(void);
 
 // Healer Check
 int maxHeroHealth(char class);
-int checkHealerMove(Hero hero, char move[]);
+int checkHealerMove(char move[]);
 void healAbility(HeroData *heroes, int healerIndex);
 
 #endif

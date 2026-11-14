@@ -7,8 +7,8 @@
 #include "heroStats.h"
 #include "enemyStats.h"
 
-const int MAX_ROWS = 100, MAX_COLUMNS = 100;
-const int MIN_ROWS = 10, MIN_COLUMNS = 10;
+#define MIN_GRID_SIZE 10
+#define MAX_GRID_SIZE 100
 
 // Utility
 void clearHero(HeroData *heroes);

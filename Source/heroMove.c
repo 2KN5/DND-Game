@@ -11,7 +11,7 @@ void heroDamage(char ***grid, int x, int y, HeroData *heroes, EnemyData *enemies
             side = roll();
             if(side % 2 == 0) ++dmg;
         }
-        int enemyDef = enemyDefence(enemies->data[enemyIndex]), totalDMG = (dmg - enemyDef <= 0 ? 0 : dmg - enemyDef);
+        int enemyDef = enemyDefence(), totalDMG = (dmg - enemyDef <= 0 ? 0 : dmg - enemyDef);
         printf("(%c) - Attacked with %d Skull(s)!\nMonster defended with %d Black Shield(s) and lost %d Body Point(s)!\n\n", heroes->data[heroIndex].class, dmg, enemyDef, totalDMG);
         heroes->score += (int)(totalDMG * 30);
         if(enemies->data[enemyIndex].health - totalDMG <= 0){
@@ -31,7 +31,7 @@ void heroDamage(char ***grid, int x, int y, HeroData *heroes, EnemyData *enemies
     pause();
 }
 
-int heroDefence(Hero hero){
+int heroDefence(void){
     int side, def = 0;
     for(int i = 0; i < 2; ++i){
         side = roll();
@@ -78,7 +78,7 @@ void healAbility(HeroData *heroes, int healerIndex){
     pause();
 }
 
-int checkHealerMove(Hero hero, char move[]){
+int checkHealerMove(char move[]){
     int curr = 2, count = 0, length = strlen(move) - 1;
     char str[6] = {0};
     while(curr <= length){

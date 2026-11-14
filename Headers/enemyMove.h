@@ -9,6 +9,6 @@
 
 // Enemy actions
 void enemyDamage(char ***grid, int x, int y, HeroData *heroes, int index);
-int enemyDefence(Enemy enemy);
+int enemyDefence(void);
 
 #endif

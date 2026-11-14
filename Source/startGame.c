@@ -10,7 +10,7 @@ void startGame(char ***grid, int rows, int col, HeroData *heroes, EnemyData *ene
     while(1){
         while(enemies->totalEnemies > 0 && heroes->numberOfHeroes > 0){
             do{
-                result = checkMove(grid, rows, col, *heroes, *enemies, move);
+                result = checkMove(*heroes, move);
                 if(result == 'I'){
                     printGrid(grid, rows, col, *heroes, *enemies, dif, level);
                     printf("\nInvalid Move!\n");

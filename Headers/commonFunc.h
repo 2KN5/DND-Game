@@ -8,7 +8,6 @@
 #include "heroStats.h"
 
 static inline void pause(){
-    int c;
     printf("Press ENTER to continue...\n");
     getchar();
 }

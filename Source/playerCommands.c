@@ -42,7 +42,7 @@ int playerActions(HeroData *heroes){
     return 0;
 }
 
-int checkAttack(char attack[], int length){
+int checkAttack(char attack[]){
     int curr = 3;
     if(attack[curr] == '*' && attack[curr - 1] != 'A') return 0;
     return 1;
@@ -179,7 +179,7 @@ int returnColNumber(char letters[]){
     }
 }
 
-void cdEnemy(char ***grid, int rows, int col, EnemyData *enemies, char dif[], int x, int y, char pos[]){
+void cdEnemy(char ***grid, EnemyData *enemies, char dif[], int x, int y, char pos[]){
     if((*grid)[x][y] == '.'){
         spawnSingleEnemy(enemies, dif, x, y);
         (*grid)[x][y] = '0' + enemies->data[enemies->totalEnemies - 1].health;
@@ -209,12 +209,12 @@ int checkString(char str[], int length, HeroData heroes){
         upperString(str);
         str[length] = '\0';
         if(!checkValidLetters(str, length, heroes)) return 0;
-        if(isHero(str[0], heroes) && !checkAttack(str, length - 1)) return 0;
+        if(isHero(str[0], heroes) && !checkAttack(str)) return 0;
         return 1;
     }
 }
 
-char checkMove(char ***grid, int rows, int col, HeroData heroes, EnemyData enemies, char move[]){
+char checkMove(HeroData heroes, char move[]){
     printf("\nMake your move: ");
     fgets(move, 28, stdin);
     int length = strlen(move) - 1;
@@ -281,7 +281,7 @@ int getCoords(char str[], int index, int rows, int col, int *x, int *y, char pos
 
     // Coordinates so I can print them later on.
     pos[j + i] = '\0';
-    if(strlen(pos) != length - saveIndex) return 0;
+    if((int)strlen(pos) != (int)(length - saveIndex)) return 0;
 
     return 1;
 }
@@ -303,7 +303,7 @@ int validCell(HeroData heroes, int x, int y, int index){
     return 0;
 }
 
-int canAttack(char ***grid, int rows, int col, int enemyX, int enemyY, HeroData heroes, char move[], int index){
+int canAttack(char ***grid, int enemyX, int enemyY, HeroData heroes, int index){
     if(isalpha((*grid)[enemyX][enemyY])){
         printf("\nYou can't attack your allies!\n\n");
         pause();
@@ -345,19 +345,19 @@ int applyCommand(char ***grid, int rows, int col, HeroData *heroes, EnemyData *e
     if(command == 'M'){
         curr = 2;
         if(!getCoords(move, curr, rows, col, &x, &y, position)) return 0;
-        cdEnemy(grid, rows, col, enemies, dif, x, y, position);
+        cdEnemy(grid, enemies, dif, x, y, position);
     } else if(command == 'A'){
         curr = 4;
         if(!getCoords(move, curr, rows, col, &x, &y, position)) return 0;
         if(!validCell(*heroes, x, y, heroIndex)) return 0;
-        if(!canAttack(grid, rows, col, x, y, *heroes, move, heroIndex)) return 0;
+        if(!canAttack(grid, x, y, *heroes, heroIndex)) return 0;
         int enemyIndex = getEnemyIndex(*enemies, x, y);
 
         // Get damage and apply it to the enemy.
         printf("\nValid Attack at %s!\n\n", position);
         heroDamage(grid, x, y, heroes, enemies, heroIndex, enemyIndex, position);
     } else {
-        if(checkHealerMove(heroes->data[heroIndex], move)){
+        if(checkHealerMove(move)){
             healAbility(heroes, heroIndex);
             return 1;
         }

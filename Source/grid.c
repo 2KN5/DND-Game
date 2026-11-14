@@ -90,7 +90,6 @@ void clear_Rooms_Hallway(char ***grid, int rows, int col){
 
 void spawnHeroes(char ***grid, int rows, int col, HeroData *heroes){
     int i = 0;
-    char str[6];
     while(i < heroes->numberOfHeroes){
         int x = rand() % (rows - 2) + 1;
         int y = rand() % (col - 2) + 1;
@@ -238,7 +237,7 @@ void drawVertical_BOTTOM(char ***grid, int rows, int col, Walls wall[], int *cou
     }
 }
 
-void drawHorizontal(char ***grid, int rows, int col, Walls wall[], int count){
+void drawHorizontal(char ***grid, int col, Walls wall[], int count){
 
     // Check if there are more than 2 walls, to avoid issues.
     if(count == 0){
@@ -263,7 +262,7 @@ void drawHorizontal(char ***grid, int rows, int col, Walls wall[], int count){
     createDoor(grid, wall[0].row, wall[0].column - 1, 1);
 
     // Connect all the other columns.
-    int prevCol = wall[0].column, prevRow = wall[0].row, curr = 1;
+    int prevCol = wall[0].column, curr = 1;
     for(int j = wall[curr].column; j <= wall[count - 1].column; ++j){
         if(j == wall[curr].column){
             for(int k = prevCol; k < wall[curr].column; ++k){
@@ -271,7 +270,6 @@ void drawHorizontal(char ***grid, int rows, int col, Walls wall[], int count){
                 (*grid)[wall[curr].row][k] = '#';
             }
             createDoor(grid, wall[curr].row, wall[curr].column - 1, prevCol + 1);
-            prevRow = wall[curr].row;
             prevCol = wall[curr].column;
             ++curr;
         }    
@@ -328,13 +326,13 @@ void createGrid(char ***grid, int rows, int col, HeroData *heroes, EnemyData *en
     int countU = 0;
     Walls *upperWalls = malloc(sizeof(Walls) * col);
     drawVertical_TOP(grid, rows, col, upperWalls, &countU);
-    drawHorizontal(grid, rows, col, upperWalls, countU);
+    drawHorizontal(grid, col, upperWalls, countU);
 
     // Generating the lower walls.
     int countL = 0;
     Walls *lowerWalls = malloc(sizeof(Walls) * col);
     drawVertical_BOTTOM(grid, rows, col, lowerWalls, &countL);
-    drawHorizontal(grid, rows, col, lowerWalls, countL);
+    drawHorizontal(grid, col, lowerWalls, countL);
 
     // Free walls
     free(upperWalls);
